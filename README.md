@@ -1,33 +1,37 @@
-# look-guides — Hub de documentación e imágenes
+# look-guides — Hub de documentación
 
-Repositorio central donde **cada producto** sube su documentación e imágenes.
-Se publica en https://look-guides.netlify.app con **deploy continuo**: cada `git push` a `master` publica solo.
+Hub central de documentación técnica. Cada **producto** sube su propia página HTML estática y la enlaza desde la home.
 
-## Estructura
+- Sitio: https://look-guides.netlify.app — **deploy continuo**: cada `git push` a `master` publica solo.
+- Lo administra el proyecto "structure"; el repo es **público** para que cualquier producto pueda sumar su doc.
 
-Cada producto tiene **su propia carpeta**. La raíz es solo del hub.
+## Cómo funciona
 
-```
-/                  index.html (hub) + infra.html
-/<producto>/       docs e imagenes de ESE producto (ej: /agentflow/, /sin-vueltas/)
-```
+- Cada producto agrega **un archivo `<producto>.html`** en la raíz (HTML estático autocontenido; usá Tailwind por CDN, mismo estilo que `infra.html`).
+- Y enlaza ese archivo desde la **home** (`index.html`) agregando: su link en la botonera y su tarjeta en el grid.
+- El `index.html` tiene **bloques marcados** para eso, así cada uno mete lo suyo sin tocar lo de los demás:
+  - Botonera: entre `<!-- NAV-LINKS -->` y `<!-- /NAV-LINKS -->`
+  - Tarjetas: entre `<!-- CARDS -->` y `<!-- /CARDS -->`
 
-## Protocolo OBLIGATORIO para subir (para NO pisar lo de otros)
+## Protocolo OBLIGATORIO para subir
 
-Como varios productos/agentes suben al mismo repo, **siempre sincronizá antes de pushear**:
+La home la edita **todo el mundo**, así que **siempre sincronizá antes de pushear** o se pierde trabajo:
 
 1. Cloná fresco o actualizá:
    ```
    git clone https://github.com/arenazl/look-guides.git
-   # o si ya lo tenés:
+   # o, si ya lo tenés:
    git pull origin master
    ```
-2. Poné tus archivos en **TU carpeta** `/<producto>/`. Creala si no existe.
-3. **No toques ni borres** carpetas de otros productos.
+2. Agregá tu archivo `<producto>.html` en la raíz.
+3. Editá `index.html`:
+   - agregá tu `<a>` dentro del bloque `NAV-LINKS`;
+   - agregá tu tarjeta dentro del bloque `CARDS` (copiá el patrón de la card de Infraestructura).
+   - **No borres ni edites** los links/tarjetas de otros productos.
 4. Commit y push:
    ```
-   git add <producto>/
-   git commit -m "docs(<producto>): agrega imagenes/docs"
+   git add <producto>.html index.html
+   git commit -m "docs(<producto>): agrega pagina y card"
    git push origin master
    ```
 5. Si el push es **rechazado** (alguien subió mientras tanto):
@@ -35,5 +39,6 @@ Como varios productos/agentes suben al mismo repo, **siempre sincronizá antes d
    git pull --rebase origin master
    git push origin master
    ```
+   (Si hay conflicto, casi siempre es en `index.html`: quedate con AMBAS tarjetas/links, los tuyos y los de ellos.)
 
-**Regla de oro:** `pull` ANTES de `push`, y cada uno en SU carpeta. Así nunca se pierde el trabajo de otro.
+**Regla de oro:** `pull` antes de `push`, cada producto agrega lo suyo dentro de los bloques marcados, y nadie toca lo ajeno.
