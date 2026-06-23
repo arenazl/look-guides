@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Infraestructura — arenazl</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { scroll-behavior: smooth; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+<!-- HEADER -->
+<header class="bg-slate-900 text-white">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <p class="text-sky-400 font-semibold tracking-wide text-sm uppercase">Reporte de trabajo &middot; Infraestructura y costos</p>
+    <h1 class="text-4xl font-bold mt-2">Saneamiento de infra, Deploy Continuo y Optimización de Costos</h1>
+    <p class="text-slate-300 mt-4 max-w-3xl text-lg">Ordenamiento integral de la nube (Heroku &middot; Google Cloud &middot; Netlify): se inventariaron las apps, se automatizaron los deploys, se auditaron las API keys, se recortó la factura y se documentó todo el stack.</p>
+    <div class="flex flex-wrap gap-3 mt-6 text-sm">
+      <span class="bg-slate-800 px-3 py-1 rounded-full">Cuenta: arenazl@gmail.com</span>
+      <span class="bg-slate-800 px-3 py-1 rounded-full">Junio 2026</span>
+      <span class="bg-emerald-600 px-3 py-1 rounded-full">Estado: operativo</span>
+    </div>
+  </div>
+</header>
+
+<!-- KPIs -->
+<section class="max-w-6xl mx-auto px-6 -mt-8">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-sky-500">
+      <p class="text-3xl font-bold text-slate-900">16</p>
+      <p class="text-sm text-slate-500 mt-1">APIs en servicio (12 GCP + 4 Heroku)</p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-emerald-500">
+      <p class="text-3xl font-bold text-slate-900">17</p>
+      <p class="text-sm text-slate-500 mt-1">Servicios con deploy continuo (push &rarr; deploy)</p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-amber-500">
+      <p class="text-3xl font-bold text-slate-900">~US$50</p>
+      <p class="text-sm text-slate-500 mt-1">Ahorro mensual logrado en Cloud Run</p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-violet-500">
+      <p class="text-3xl font-bold text-slate-900">~60</p>
+      <p class="text-sm text-slate-500 mt-1">Recursos muertos eliminados (apps/sites)</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESUMEN EJECUTIVO -->
+<section class="max-w-6xl mx-auto px-6 py-12">
+  <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+    <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    Resumen ejecutivo
+  </h2>
+  <div class="bg-white rounded-xl shadow p-6 mt-4 space-y-3 text-slate-700 leading-relaxed">
+    <p><strong>Qué se hizo:</strong> se ordenó una infraestructura que había crecido sin control (más de 100 apps repartidas entre tres nubes), se automatizó el despliegue de todas las apps activas y se redujo la factura de Google Cloud sin afectar el servicio.</p>
+    <p><strong>Resultado para el negocio:</strong> ahora cada cambio de código se publica solo con un <span class="mono bg-slate-100 px-1 rounded">git push</span> (cero intervención manual), la factura mensual de servidores bajó cerca de un 60%, y existe una alerta de presupuesto que avisa antes de cualquier sorpresa.</p>
+    <p><strong>Verificación:</strong> se probó el circuito completo end-to-end: las 10 APIs nuevas responden correctamente, los frontends cargan y la comunicación frontend&rarr;API funciona (CORS validado).</p>
+  </div>
+</section>
+
+<!-- INVENTARIO DE APIS -->
+<section class="max-w-6xl mx-auto px-6 pb-12">
+  <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+    <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/></svg>
+    Inventario de APIs &mdash; dónde quedó cada una
+  </h2>
+
+  <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-2">Google Cloud Run (12 APIs)</h3>
+  <div class="bg-white rounded-xl shadow overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-100 text-slate-600 text-left">
+        <tr><th class="px-4 py-3">API</th><th class="px-4 py-3">Proyecto GCP</th><th class="px-4 py-3">URL backend</th><th class="px-4 py-3">Front (Netlify)</th><th class="px-4 py-3">Deploy continuo</th></tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <tr><td class="px-4 py-3 font-medium">agentflow-api</td><td class="px-4 py-3">agentflow-arenazl</td><td class="px-4 py-3 mono text-xs text-slate-500">agentflow-api-jt6e7rkq3a-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">agentflow-beyker.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">dbsync-api</td><td class="px-4 py-3">dbsync-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">dbsync-api-e3fkuxg5oa-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">dbsync-arenazl.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo (.NET 8)</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">djfreeapp-api</td><td class="px-4 py-3">djfreeapp-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">djfreeapp-api-sz4ku4dehq-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">groovesyncdj.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo (repo slsk-backend)</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">fenix-parser-api</td><td class="px-4 py-3">fenix-parser-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">fenix-parser-api-shm5dpvz4q-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">fenix-parser.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">munify-api</td><td class="px-4 py-3">munify-api</td><td class="px-4 py-3 mono text-xs text-slate-500">munify-api-vmpxsxe7ra-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">reclamos-mun.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">media-studio-api</td><td class="px-4 py-3">munify-api</td><td class="px-4 py-3 mono text-xs text-slate-500">media-studio-api-vmpxsxe7ra-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">media-studio-arenazl.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">tts-service</td><td class="px-4 py-3">munify-api</td><td class="px-4 py-3 mono text-xs text-slate-500">tts-service-vmpxsxe7ra-rj.a.run.app</td><td class="px-4 py-3 text-slate-400">&mdash;</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo (repo nuevo)</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">salesbot-api</td><td class="px-4 py-3">salesbot-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">salesbot-api-agutddcp5q-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">salesbot-arenazl.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo (min=0)</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">eventmarker-api</td><td class="px-4 py-3">sinvueltasya-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">eventmarker-api-gpunxaloxa-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">eventmarker.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">tasar-api</td><td class="px-4 py-3">tasar-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">tasar-api-ka3yn5r7dq-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">tasar-app.netlify.app</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Activo</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">mrcerramientos-api</td><td class="px-4 py-3">dbsync-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">mrcerramientos-api-e3fkuxg5oa-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">mrcerramientos.netlify.app</td><td class="px-4 py-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-semibold">Pendiente (ver nota seguridad)</span></td></tr>
+        <tr class="bg-slate-50"><td class="px-4 py-3 font-medium">hablah-api</td><td class="px-4 py-3">hablah-prod</td><td class="px-4 py-3 mono text-xs text-slate-500">hablah-api-wfhgngss7a-rj.a.run.app</td><td class="px-4 py-3 mono text-xs">hablah-app.netlify.app</td><td class="px-4 py-3"><span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs font-semibold">Intocable (otro equipo)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-xs text-slate-500 mt-2">Nota: las APIs en Cloud Run <strong>escalan a cero</strong> (no pagan si no hay tráfico) salvo hablah-api. Los nombres de proyecto no siempre coinciden con el contenido (ej. eventmarker vive en "sinvueltasya-prod") &mdash; legado del crecimiento desordenado.</p>
+
+  <h3 class="text-lg font-semibold text-slate-700 mt-8 mb-2">Heroku (4 APIs &mdash; corren 24/7)</h3>
+  <div class="bg-white rounded-xl shadow overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-100 text-slate-600 text-left">
+        <tr><th class="px-4 py-3">API</th><th class="px-4 py-3">Plan / costo</th><th class="px-4 py-3">Repo</th><th class="px-4 py-3">Deploy continuo</th></tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <tr><td class="px-4 py-3 font-medium">bsi-back</td><td class="px-4 py-3">Eco (pool US$5)</td><td class="px-4 py-3 mono text-xs">arenazl/bsi-server</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Auto-deploy</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">houseapp-api</td><td class="px-4 py-3">Eco (pool US$5)</td><td class="px-4 py-3 mono text-xs">arenazl/houseapp</td><td class="px-4 py-3"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-semibold">Auto-deploy</span></td></tr>
+        <tr><td class="px-4 py-3 font-medium">ngcheck-intel-api</td><td class="px-4 py-3">Eco (pool US$5)</td><td class="px-4 py-3 mono text-xs">Azure DevOps</td><td class="px-4 py-3"><span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs font-semibold">N/A (repo en Azure)</span></td></tr>
+        <tr class="bg-slate-50"><td class="px-4 py-3 font-medium">hablah-api</td><td class="px-4 py-3">Basic (US$7)</td><td class="px-4 py-3 mono text-xs">&mdash;</td><td class="px-4 py-3"><span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs font-semibold">Intocable</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-xs text-slate-500 mt-2">Costo total Heroku: ~US$12/mes. <strong>hablah-api está duplicada</strong> (corre en Heroku Y en GCP, paga en ambos lados).</p>
+</section>
+
+<!-- DEPLOY CONTINUO -->
+<section class="bg-white border-y border-slate-200">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+      <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      Deploy continuo &mdash; cómo quedó el flujo
+    </h2>
+    <div class="grid md:grid-cols-3 gap-6 mt-6">
+      <div class="border border-slate-200 rounded-xl p-5">
+        <h3 class="font-semibold text-slate-900">Heroku</h3>
+        <p class="text-sm text-slate-600 mt-2">Auto-deploy nativo de GitHub. Un <span class="mono">git push</span> a la rama publica solo. Cero YAML, gratis.</p>
+      </div>
+      <div class="border border-slate-200 rounded-xl p-5">
+        <h3 class="font-semibold text-slate-900">Netlify (fronts)</h3>
+        <p class="text-sm text-slate-600 mt-2">Build-on-push: cada push reconstruye y publica el frontend. 20+ sitios conectados a su repo.</p>
+      </div>
+      <div class="border border-slate-200 rounded-xl p-5">
+        <h3 class="font-semibold text-slate-900">GCP Cloud Run</h3>
+        <p class="text-sm text-slate-600 mt-2">Cloud Build trigger por servicio: push a main &rarr; build + deploy automático. Sin scripts en el repo.</p>
+      </div>
+    </div>
+    <div class="bg-sky-50 border border-sky-200 rounded-xl p-5 mt-6">
+      <p class="text-sky-900"><strong>Detalle técnico:</strong> los triggers de Cloud Build 2.ª gen exigen un <span class="mono">--service-account</span> explícito (cambio de Google 2024) y la conexión a GitHub requiere un token OAuth por proyecto (se reusó el de un proyecto piloto de forma no interactiva). Los backends Python sin Dockerfile fallaban porque el builder usa Python 3.13/3.14; se resolvió fijando la versión con un Dockerfile (<span class="mono">python:3.11-slim</span>).</p>
+    </div>
+  </div>
+</section>
+
+<!-- KEYS -->
+<section class="max-w-6xl mx-auto px-6 py-12">
+  <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+    <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+    API Keys (Gemini) &mdash; auditoría
+  </h2>
+  <div class="grid md:grid-cols-3 gap-4 mt-6">
+    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-rose-500">
+      <h3 class="font-semibold text-rose-700">Riesgo: key "fantasma"</h3>
+      <p class="text-sm text-slate-600 mt-2">Una misma key la comparten <strong>6 apps</strong> y no vive en ningún proyecto GCP del usuario. Punto único de falla: si se cae, caen las 6.</p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-amber-500">
+      <h3 class="font-semibold text-amber-700">Keys sin uso</h3>
+      <p class="text-sm text-slate-600 mt-2">3 keys registradas que <strong>no las usa nadie</strong> (dbsync-prod, salesbot-prod, sinvueltasya-prod). Borrables.</p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-5 border-l-4 border-emerald-500">
+      <h3 class="font-semibold text-emerald-700">Bien guardadas</h3>
+      <p class="text-sm text-slate-600 mt-2">Las apps de Cloud Run usan <strong>Secret Manager</strong> (seguro). Las de Heroku, texto plano en config (mejorable).</p>
+    </div>
+  </div>
+  <p class="text-sm text-slate-600 mt-4">El método: se cruzó el valor real de cada key (no por nombre) entre lo registrado en GCP y lo que usa cada backend. Hallazgo clave: <strong>el nombre de una key no indica qué app la usa</strong> (la key llamada "ngcheck" o "pagealert" en realidad no las usa nadie). Detalle completo en <span class="mono">INFORME_KEYS.md</span>.</p>
+</section>
+
+<!-- COSTOS -->
+<section class="bg-slate-900 text-white">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <h2 class="text-2xl font-bold flex items-center gap-2">
+      <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Optimización de costos
+    </h2>
+    <div class="grid md:grid-cols-2 gap-8 mt-6">
+      <div>
+        <h3 class="font-semibold text-slate-300 mb-3">Acciones aplicadas</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="flex justify-between border-b border-slate-700 pb-2"><span>salesbot-api &rarr; escala a cero (min=0)</span><span class="text-emerald-400 font-semibold">-US$21/mes</span></li>
+          <li class="flex justify-between border-b border-slate-700 pb-2"><span>salesbot-baileys &rarr; borrado (ya no se usa)</span><span class="text-emerald-400 font-semibold">-US$21-38/mes</span></li>
+          <li class="flex justify-between border-b border-slate-700 pb-2"><span>djfreeapp &rarr; bajó solo (límite a usuarios)</span><span class="text-emerald-400 font-semibold">24h&rarr;2h/día</span></li>
+          <li class="flex justify-between pb-2"><span>Presupuesto + alertas (50/90/100%)</span><span class="text-sky-400 font-semibold">configurado</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-slate-300 mb-3">Antes vs. después</h3>
+        <div class="space-y-3 text-sm">
+          <div><div class="flex justify-between mb-1"><span>Cloud Run antes</span><span>US$69/mes</span></div><div class="w-full bg-slate-700 rounded h-3"><div class="bg-rose-500 h-3 rounded" style="width:100%"></div></div></div>
+          <div><div class="flex justify-between mb-1"><span>Cloud Run después</span><span>~US$17-27/mes</span></div><div class="w-full bg-slate-700 rounded h-3"><div class="bg-emerald-500 h-3 rounded" style="width:32%"></div></div></div>
+        </div>
+        <p class="text-slate-400 text-sm mt-4">Lo que queda de gasto es básicamente <strong>la IA (Gemini, ~US$29)</strong> &mdash; eso es valor, no desperdicio. Detalle en <span class="mono">REPORTE_COSTOS.html</span>.</p>
+      </div>
+    </div>
+    <div class="bg-slate-800 rounded-xl p-5 mt-6 text-sm text-slate-300">
+      <strong class="text-white">Por qué GCP costaba más que Heroku:</strong> en Heroku las apps estaban dormidas (gratis); en GCP están despiertas con tráfico real, se sumó la IA, y había servicios fijados a 24/7. Aprendizaje: las cargas 24/7 constantes son más baratas en un dyno fijo de Heroku; las esporádicas, en Cloud Run (escala a cero).
+    </div>
+  </div>
+</section>
+
+<!-- STUDIO + LIMPIEZA + HERRAMIENTAS -->
+<section class="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-6">
+  <div class="bg-white rounded-xl shadow p-6">
+    <h3 class="font-bold text-slate-900">Caso especial: studio</h3>
+    <p class="text-sm text-slate-600 mt-2">Un proyecto borrado por error se <strong>recuperó con sus datos intactos</strong> (Firestore). El servidor sigue caído por un bug de Google (la recuperación no propagó al subsistema de Cloud Run). Caso de soporte abierto con Google; se reactiva apenas lo destraben.</p>
+  </div>
+  <div class="bg-white rounded-xl shadow p-6">
+    <h3 class="font-bold text-slate-900">Limpieza</h3>
+    <p class="text-sm text-slate-600 mt-2">Se eliminaron ~60 recursos muertos: 4 apps Heroku, 10 sitios Netlify, servicios duplicados (salesbot-backend, salesbot-baileys) y un proyecto GCP. Heroku pasó de 40 a 36 apps; Netlify de 52 a 42 sitios.</p>
+  </div>
+  <div class="bg-white rounded-xl shadow p-6">
+    <h3 class="font-bold text-slate-900">Herramientas creadas</h3>
+    <p class="text-sm text-slate-600 mt-2">Para sostener esto: 2 agentes especializados (deploy GCP y billing) y 6 guías técnicas reutilizables (GCP, Heroku, Netlify, Docker, DNS, CI/CD) con los procedimientos validados.</p>
+  </div>
+</section>
+
+<!-- PENDIENTES -->
+<section class="max-w-6xl mx-auto px-6 pb-16">
+  <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+    <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    Pendientes
+  </h2>
+  <div class="bg-white rounded-xl shadow divide-y divide-slate-100 mt-4">
+    <div class="p-5 flex items-start gap-3"><span class="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-1 rounded mt-0.5">SEGURIDAD</span><div><p class="font-medium text-slate-900">mrcerramientos &mdash; deploy continuo en pausa</p><p class="text-sm text-slate-600">Se encontró la contraseña de la base de producción escrita en el código. No se subió a GitHub. Falta decidir: externalizar la clave (recomendado) y/o rotarla.</p></div></div>
+    <div class="p-5 flex items-start gap-3"><span class="bg-sky-100 text-sky-700 text-xs font-bold px-2 py-1 rounded mt-0.5">EXTERNO</span><div><p class="font-medium text-slate-900">studio &mdash; esperando a Google</p><p class="text-sm text-slate-600">Caso de soporte abierto. El servidor se reactiva cuando Google propague la recuperación del proyecto. Datos a salvo.</p></div></div>
+    <div class="p-5 flex items-start gap-3"><span class="bg-violet-100 text-violet-700 text-xs font-bold px-2 py-1 rounded mt-0.5">OPCIONAL</span><div><p class="font-medium text-slate-900">Optimizar costo de IA (Gemini)</p><p class="text-sm text-slate-600">Próximo foco de ahorro: usar un modelo más barato o reducir llamadas. La key "fantasma" compartida por 6 apps conviene resolverla.</p></div></div>
+  </div>
+</section>
+
+<footer class="bg-slate-900 text-slate-400 text-sm">
+  <div class="max-w-6xl mx-auto px-6 py-8">
+    <p>Documento generado automáticamente &middot; Infraestructura arenazl@gmail.com &middot; Junio 2026</p>
+    <p class="mt-1 text-slate-500">Archivos de referencia en el proyecto: INFORME_KEYS.md &middot; REPORTE_COSTOS.html &middot; MAPA_UNIDADES.md &middot; GCP_RUNBOOK.md &middot; ESTADO_SESION.md</p>
+  </div>
+</footer>
+
+</body>
+</html>
