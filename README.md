@@ -1,44 +1,45 @@
 # look-guides — Hub de documentación
 
-Hub central de documentación técnica. Cada **producto** sube su propia página HTML estática y la enlaza desde la home.
+Hub central de documentación técnica. Cada **aplicación** tiene su **carpeta** con páginas estáticas (capturas, tutoriales de cómo funciona la app), y se enlaza desde la home.
 
 - Sitio: https://look-guides.netlify.app — **deploy continuo**: cada `git push` a `master` publica solo.
-- Lo administra el proyecto "structure"; el repo es **público** para que cualquier producto pueda sumar su doc.
+- Repo **público**. Lo administra el proyecto "structure"; cualquier app puede sumar su carpeta.
 
-## Cómo funciona
+## Estructura
 
-- Cada producto agrega **un archivo `<producto>.html`** en la raíz (HTML estático autocontenido; usá Tailwind por CDN, mismo estilo que `infra.html`).
-- Y enlaza ese archivo desde la **home** (`index.html`) agregando: su link en la botonera y su tarjeta en el grid.
-- El `index.html` tiene **bloques marcados** para eso, así cada uno mete lo suyo sin tocar lo de los demás:
-  - Botonera: entre `<!-- NAV-LINKS -->` y `<!-- /NAV-LINKS -->`
-  - Tarjetas: entre `<!-- CARDS -->` y `<!-- /CARDS -->`
+```
+/index.html              hub: una card por APLICACION (linkea a /<app>/)
+/<app>/index.html        sub-home de la app: lista sus paginas/capturas
+/<app>/<pagina>.html     cada pagina estatica (captura, tutorial)
+/<app>/img/...           imagenes/assets de esa app (si hacen falta)
+/README.md               este protocolo
+```
 
-## Protocolo OBLIGATORIO para subir
+Ejemplo real: la carpeta `infraestructura/` (con su `index.html`).
 
-La home la edita **todo el mundo**, así que **siempre sincronizá antes de pushear** o se pierde trabajo:
+## Cómo agregar tu app
 
-1. Cloná fresco o actualizá:
+1. Cloná fresco o actualizá (SIEMPRE, antes de tocar nada):
    ```
    git clone https://github.com/arenazl/look-guides.git
-   # o, si ya lo tenés:
-   git pull origin master
+   # o, si ya lo tenés:  git pull origin master
    ```
-2. Agregá tu archivo `<producto>.html` en la raíz.
-3. Editá `index.html`:
-   - agregá tu `<a>` dentro del bloque `NAV-LINKS`;
-   - agregá tu tarjeta dentro del bloque `CARDS` (copiá el patrón de la card de Infraestructura).
-   - **No borres ni edites** los links/tarjetas de otros productos.
+2. Creá tu carpeta `<app>/` con un `index.html` (sub-home que lista tus páginas) y tus `.html`/imágenes adentro. Usá Tailwind por CDN, sin emojis, mismo estilo que `infraestructura/index.html`.
+3. Enlazá tu app desde la home `index.html` (**solo la primera vez**, al dar de alta la app):
+   - link en la botonera, dentro del bloque `<!-- NAV-LINKS -->`:
+     `<a href="mi-app/" class="px-3 py-2 rounded hover:bg-slate-800">Mi App</a>`
+   - card en el grid, dentro del bloque `<!-- CARDS -->`: copiá la card de Infraestructura y apuntá `href="mi-app/"`.
 4. Commit y push:
    ```
-   git add <producto>.html index.html
-   git commit -m "docs(<producto>): agrega pagina y card"
+   git add <app>/ index.html
+   git commit -m "docs(<app>): agrega app"
    git push origin master
    ```
-5. Si el push es **rechazado** (alguien subió mientras tanto):
-   ```
-   git pull --rebase origin master
-   git push origin master
-   ```
-   (Si hay conflicto, casi siempre es en `index.html`: quedate con AMBAS tarjetas/links, los tuyos y los de ellos.)
+5. Si el push **rebota**: `git pull --rebase origin master` y push de nuevo.
 
-**Regla de oro:** `pull` antes de `push`, cada producto agrega lo suyo dentro de los bloques marcados, y nadie toca lo ajeno.
+**Para agregar MÁS páginas a una app que ya existe:** solo agregás `.html` dentro de `<app>/` y los linkeás desde `<app>/index.html`. **No tocás la home → cero conflicto.**
+
+## Reglas de oro
+- **Pull (o `pull --rebase`) antes de push.** La home (`index.html`) es lo único compartido.
+- Cada app trabaja DENTRO de su carpeta. No toques carpetas ni cards de otras apps.
+- En ~1-2 min de pushear ya queda publicado en https://look-guides.netlify.app.
