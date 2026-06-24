@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenix Parser — Subir archivo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#08080B;color:#F4F4F5;min-height:100vh;display:flex}
+.sidebar{width:220px;background:#0E0E12;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:16px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#FF7A1F,#FF3366);border-radius:9px;display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:14px}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.logo-sub{font-size:10px;color:#5C5C66;margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;color:#8E8E99;border-left:2px solid transparent}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.5}
+.nav-item.active{color:#F4F4F5;background:rgba(255,122,31,0.06);border-left-color:#FF7A1F}
+.nav-item.active .nav-dot{background:#FF7A1F;opacity:1}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:56px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.page-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF7A1F,#FF3366);display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.content{flex:1;padding:28px;display:flex;flex-direction:column;gap:20px;overflow:auto}
+.drop-zone{border:2px dashed rgba(255,122,31,0.3);border-radius:16px;padding:56px 28px;display:flex;flex-direction:column;align-items:center;gap:14px;background:rgba(255,122,31,0.03);cursor:pointer;transition:all 180ms}
+.drop-icon{width:52px;height:52px;border-radius:14px;background:rgba(255,122,31,0.10);display:grid;place-items:center}
+.drop-icon svg{color:#FF7A1F}
+.drop-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#F4F4F5}
+.drop-sub{font-size:12.5px;color:#5C5C66;text-align:center;max-width:340px;line-height:1.6}
+.btn{background:linear-gradient(135deg,#FF7A1F,#FF3366);border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-ghost{background:#1B1B22;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 18px;font-size:13px;font-weight:500;color:#C5C5CC;cursor:pointer;font-family:'Inter',sans-serif}
+.card{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden}
+.card-head{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{text-align:left;font-weight:500;color:#5C5C66;font-size:10.5px;text-transform:uppercase;letter-spacing:0.10em;padding:10px 20px;border-bottom:1px solid rgba(255,255,255,0.04)}
+tbody td{padding:12px 20px;border-bottom:1px solid rgba(255,255,255,0.04);color:#C5C5CC}
+tbody tr:last-child td{border-bottom:none}
+.pill{display:inline-flex;font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:0.05em}
+.pill-ok{background:rgba(16,185,129,0.10);color:#34D399}
+.pill-warn{background:rgba(245,158,11,0.10);color:#FBBF24}
+.pill-bad{background:rgba(244,63,94,0.10);color:#FB7185}
+.mono{font-variant-numeric:tabular-nums;font-family:monospace;font-size:11px;color:#5C5C66}
+.progress-bar{height:4px;border-radius:2px;background:#1B1B22;overflow:hidden;margin-top:4px;width:120px}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#FF7A1F,#FF3366)}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">F</div>
+    <div><div class="logo-name">Fenix Parser</div><div class="logo-sub">v2.4</div></div>
+  </div>
+  <div class="nav-item"><div class="nav-dot"></div>Dashboard</div>
+  <div class="nav-item"><div class="nav-dot"></div>Shows</div>
+  <div class="nav-item"><div class="nav-dot"></div>Operaciones</div>
+  <div class="nav-item active"><div class="nav-dot"></div>Subir archivo</div>
+  <div class="nav-item"><div class="nav-dot"></div>Configuración</div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title">Subir archivo Payway</div>
+    <div class="avatar">SM</div>
+  </div>
+  <div class="content">
+
+    <div class="drop-zone">
+      <div class="drop-icon">
+        <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+        </svg>
+      </div>
+      <div class="drop-title">Arrastra tu archivo de liquidacion aqui</div>
+      <div class="drop-sub">Formatos aceptados: archivos .txt de Payway. Podes subir multiples archivos de un mismo lote.</div>
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <button class="btn">Seleccionar archivos</button>
+        <button class="btn-ghost">Ver historial</button>
+      </div>
+    </div>
+
+    <!-- archivo procesandose -->
+    <div style="background:#0E0E12;border:1px solid rgba(255,122,31,0.2);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px">
+      <div style="width:36px;height:36px;border-radius:9px;background:rgba(255,122,31,0.10);display:grid;place-items:center;flex-shrink:0">
+        <svg width="16" height="16" fill="none" stroke="#FF7A1F" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;color:#F4F4F5">LIQPAY_20260614_001.txt</div>
+        <div class="progress-bar" style="width:100%;margin-top:8px"><div class="progress-fill" style="width:72%"></div></div>
+        <div style="font-size:11px;color:#5C5C66;margin-top:4px">Procesando... 1.247 de 1.730 registros</div>
+      </div>
+      <div style="font-size:12px;color:#FF7A1F;font-weight:600">72%</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Ultimos uploads</div>
+        <span style="font-size:11.5px;color:#5C5C66">6 archivos este mes</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Archivo</th>
+            <th>Fecha</th>
+            <th>Show asignado</th>
+            <th>Registros</th>
+            <th>Bruto</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div style="font-weight:500;color:#F4F4F5">LIQPAY_20260613_002.txt</div><div class="mono">4.2 MB</div></td>
+            <td style="color:#8E8E99">13/06/26 18:42</td>
+            <td>Movistar Arena</td>
+            <td style="font-weight:600;color:#F4F4F5">1.730</td>
+            <td style="font-weight:700;color:#34D399;font-variant-numeric:tabular-nums">$847.200</td>
+            <td><span class="pill pill-ok">procesado</span></td>
+          </tr>
+          <tr>
+            <td><div style="font-weight:500;color:#F4F4F5">LIQPAY_20260610_001.txt</div><div class="mono">2.8 MB</div></td>
+            <td style="color:#8E8E99">10/06/26 09:15</td>
+            <td>Luna Park</td>
+            <td style="font-weight:600;color:#F4F4F5">987</td>
+            <td style="font-weight:700;color:#34D399;font-variant-numeric:tabular-nums">$512.400</td>
+            <td><span class="pill pill-ok">procesado</span></td>
+          </tr>
+          <tr>
+            <td><div style="font-weight:500;color:#F4F4F5">LIQPAY_20260607_003.txt</div><div class="mono">1.1 MB</div></td>
+            <td style="color:#8E8E99">07/06/26 14:30</td>
+            <td style="color:#FBBF24">Sin asignar</td>
+            <td style="font-weight:600;color:#F4F4F5">412</td>
+            <td style="font-weight:700;color:#34D399;font-variant-numeric:tabular-nums">$198.800</td>
+            <td><span class="pill pill-warn">revisar</span></td>
+          </tr>
+          <tr>
+            <td><div style="font-weight:500;color:#F4F4F5">LIQPAY_20260603_001.txt</div><div class="mono">3.6 MB</div></td>
+            <td style="color:#8E8E99">03/06/26 11:00</td>
+            <td>Movistar Arena</td>
+            <td style="font-weight:600;color:#F4F4F5">1.247</td>
+            <td style="font-weight:700;color:#34D399;font-variant-numeric:tabular-nums">$621.900</td>
+            <td><span class="pill pill-ok">procesado</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

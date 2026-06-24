@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenix Parser — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#08080B;color:#F4F4F5;min-height:100vh;display:flex}
+/* sidebar */
+.sidebar{width:220px;background:#0E0E12;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:16px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#FF7A1F,#FF3366);border-radius:9px;display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:14px}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#F4F4F5}
+.logo-sub{font-size:10px;color:#5C5C66;margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;color:#8E8E99;cursor:pointer;border-left:2px solid transparent;transition:all 120ms}
+.nav-item.active{color:#F4F4F5;background:rgba(255,122,31,0.06);border-left-color:#FF7A1F}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.5}
+.nav-item.active .nav-dot{background:#FF7A1F;opacity:1}
+/* main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:56px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#08080B}
+.page-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#F4F4F5}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF7A1F,#FF3366);display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.content{flex:1;padding:28px;display:flex;flex-direction:column;gap:20px;overflow:auto}
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;position:relative;overflow:hidden}
+.kpi-rail{position:absolute;left:0;top:0;bottom:0;width:2px;background:#FF7A1F}
+.kpi-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.12em;color:#5C5C66;font-weight:600;margin-bottom:14px}
+.kpi-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.02em;color:#F4F4F5;line-height:1}
+.kpi-val .cur{font-size:14px;font-weight:500;color:#8E8E99;margin-right:2px}
+.kpi-foot{margin-top:10px;font-size:11.5px;color:#5C5C66;display:flex;align-items:center;gap:6px}
+.badge-ok{color:#34D399;font-weight:600}
+.badge-warn{color:#FBBF24;font-weight:600}
+/* grid 2 cols */
+.grid2{display:grid;grid-template-columns:1fr 340px;gap:16px}
+.card{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px}
+.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:#F4F4F5;margin-bottom:16px}
+/* bar chart */
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:110px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#FF7A1F,rgba(255,122,31,0.4));transition:opacity 120ms}
+.bar-label{font-size:10px;color:#5C5C66;font-weight:500}
+.bar-val{font-size:9.5px;color:#8E8E99;font-variant-numeric:tabular-nums}
+/* top shows */
+.show-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.show-row:last-child{border-bottom:none}
+.show-cover-sm{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:700;color:#fff;font-size:14px;flex-shrink:0}
+.show-info{flex:1;min-width:0}
+.show-name{font-size:12.5px;font-weight:600;color:#F4F4F5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.show-venue{font-size:11px;color:#5C5C66;margin-top:2px}
+.show-bruto{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#F4F4F5}
+.show-bar{height:3px;border-radius:2px;background:#1B1B22;margin-top:4px;overflow:hidden}
+.show-bar-fill{height:100%;border-radius:2px;background:#FF7A1F}
+/* pills */
+.pill{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:0.05em}
+.pill-ok{background:rgba(16,185,129,0.10);color:#34D399}
+.pill-warn{background:rgba(245,158,11,0.10);color:#FBBF24}
+.pill-flame{background:rgba(255,122,31,0.10);color:#FF7A1F}
+/* distribución */
+.dist-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dist-label{font-size:12px;color:#8E8E99;flex:1}
+.dist-bar{flex:2;height:6px;border-radius:3px;background:#1B1B22;overflow:hidden}
+.dist-fill{height:100%;border-radius:3px}
+.dist-pct{font-size:11.5px;font-weight:600;color:#F4F4F5;font-variant-numeric:tabular-nums;width:36px;text-align:right}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">F</div>
+    <div><div class="logo-name">Fenix Parser</div><div class="logo-sub">v2.4</div></div>
+  </div>
+  <div class="nav-item active"><div class="nav-dot"></div>Dashboard</div>
+  <div class="nav-item"><div class="nav-dot"></div>Shows</div>
+  <div class="nav-item"><div class="nav-dot"></div>Operaciones</div>
+  <div class="nav-item"><div class="nav-dot"></div>Subir archivo</div>
+  <div class="nav-item"><div class="nav-dot"></div>Configuración</div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title">Dashboard</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:12px;color:#5C5C66">Jun 2026</span>
+      <div class="avatar">SM</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-rail"></div>
+        <div class="kpi-label">Bruto Total</div>
+        <div class="kpi-val"><span class="cur">$</span>4.287.320</div>
+        <div class="kpi-foot"><span class="badge-ok">+12.4%</span> vs mes anterior</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-rail" style="background:#34D399"></div>
+        <div class="kpi-label">Neto Estimado</div>
+        <div class="kpi-val"><span class="cur">$</span>3.941.830</div>
+        <div class="kpi-foot"><span class="badge-ok">+11.8%</span> después de comisiones</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-rail" style="background:#60A5FA"></div>
+        <div class="kpi-label">Operaciones</div>
+        <div class="kpi-val">1.847</div>
+        <div class="kpi-foot"><span class="badge-ok">+247</span> este mes</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-rail" style="background:#A78BFA"></div>
+        <div class="kpi-label">Shows Activos</div>
+        <div class="kpi-val">4</div>
+        <div class="kpi-foot"><span class="badge-warn">2</span> próximos 30 días</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Evolución mensual — Bruto ($)</div>
+        <div class="chart-bars">
+          <div class="bar-wrap"><div class="bar-val">1.2M</div><div class="bar" style="height:42%"></div><div class="bar-label">Ene</div></div>
+          <div class="bar-wrap"><div class="bar-val">1.5M</div><div class="bar" style="height:52%"></div><div class="bar-label">Feb</div></div>
+          <div class="bar-wrap"><div class="bar-val">0.9M</div><div class="bar" style="height:31%"></div><div class="bar-label">Mar</div></div>
+          <div class="bar-wrap"><div class="bar-val">2.1M</div><div class="bar" style="height:72%"></div><div class="bar-label">Abr</div></div>
+          <div class="bar-wrap"><div class="bar-val">3.8M</div><div class="bar" style="height:90%;background:linear-gradient(180deg,#FF7A1F,#FF3366)"></div><div class="bar-label">May</div></div>
+          <div class="bar-wrap"><div class="bar-val">4.3M</div><div class="bar" style="height:100%;background:linear-gradient(180deg,#FF7A1F,#FF3366)"></div><div class="bar-label">Jun</div></div>
+        </div>
+        <div style="margin-top:20px">
+          <div class="card-title" style="font-size:12.5px;margin-bottom:12px">Distribución por tarjeta</div>
+          <div class="dist-row"><span class="dist-label">VISA</span><div class="dist-bar"><div class="dist-fill" style="width:48%;background:#60A5FA"></div></div><span class="dist-pct">48%</span></div>
+          <div class="dist-row"><span class="dist-label">MASTER</span><div class="dist-bar"><div class="dist-fill" style="width:31%;background:#A78BFA"></div></div><span class="dist-pct">31%</span></div>
+          <div class="dist-row"><span class="dist-label">AMEX</span><div class="dist-bar"><div class="dist-fill" style="width:13%;background:#FF7A1F"></div></div><span class="dist-pct">13%</span></div>
+          <div class="dist-row"><span class="dist-label">CABAL</span><div class="dist-bar"><div class="dist-fill" style="width:8%;background:#34D399"></div></div><span class="dist-pct">8%</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Top Shows</div>
+        <div class="show-row">
+          <div class="show-cover-sm" style="background:linear-gradient(135deg,#FF7A1F,#FF3366)">M</div>
+          <div class="show-info">
+            <div class="show-name">Movistar Arena</div>
+            <div class="show-venue">Buenos Aires · 14 Jun</div>
+            <div class="show-bar"><div class="show-bar-fill" style="width:100%"></div></div>
+          </div>
+          <div style="text-align:right"><div class="show-bruto">$2.1M</div><div style="margin-top:4px"><span class="pill pill-ok">activo</span></div></div>
+        </div>
+        <div class="show-row">
+          <div class="show-cover-sm" style="background:linear-gradient(135deg,#A78BFA,#60A5FA)">L</div>
+          <div class="show-info">
+            <div class="show-name">Luna Park</div>
+            <div class="show-venue">Buenos Aires · 28 Jun</div>
+            <div class="show-bar"><div class="show-bar-fill" style="width:72%"></div></div>
+          </div>
+          <div style="text-align:right"><div class="show-bruto">$1.5M</div><div style="margin-top:4px"><span class="pill pill-ok">activo</span></div></div>
+        </div>
+        <div class="show-row">
+          <div class="show-cover-sm" style="background:linear-gradient(135deg,#2DD4BF,#34D399)">T</div>
+          <div class="show-info">
+            <div class="show-name">Teatro Gran Rex</div>
+            <div class="show-venue">Buenos Aires · 5 Jul</div>
+            <div class="show-bar"><div class="show-bar-fill" style="width:38%"></div></div>
+          </div>
+          <div style="text-align:right"><div class="show-bruto">$487K</div><div style="margin-top:4px"><span class="pill pill-warn">próximo</span></div></div>
+        </div>
+        <div class="show-row">
+          <div class="show-cover-sm" style="background:linear-gradient(135deg,#FBBF24,#F59E0B)">E</div>
+          <div class="show-info">
+            <div class="show-name">Estadio Obras</div>
+            <div class="show-venue">Buenos Aires · 19 Jul</div>
+            <div class="show-bar"><div class="show-bar-fill" style="width:12%"></div></div>
+          </div>
+          <div style="text-align:right"><div class="show-bruto">$198K</div><div style="margin-top:4px"><span class="pill pill-warn">próximo</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

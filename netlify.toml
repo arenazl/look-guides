@@ -1,0 +1,4 @@
+[build]
+  # Genera el index del hub y los sub-index de cada app escaneando /apps en cada deploy.
+  command = "node build.js"
+  publish = "."

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenix Parser — Operaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#08080B;color:#F4F4F5;min-height:100vh;display:flex}
+.sidebar{width:220px;background:#0E0E12;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:16px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#FF7A1F,#FF3366);border-radius:9px;display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:14px}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.logo-sub{font-size:10px;color:#5C5C66;margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;color:#8E8E99;border-left:2px solid transparent}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.5}
+.nav-item.active{color:#F4F4F5;background:rgba(255,122,31,0.06);border-left-color:#FF7A1F}
+.nav-item.active .nav-dot{background:#FF7A1F;opacity:1}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:56px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.page-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF7A1F,#FF3366);display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.content{flex:1;padding:24px 28px;display:flex;flex-direction:column;gap:16px;overflow:auto}
+/* filters */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-btn{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:6px 12px;font-size:12px;color:#8E8E99;display:flex;align-items:center;gap:6px}
+.filter-btn.active{border-color:rgba(255,122,31,0.4);color:#FF7A1F;background:rgba(255,122,31,0.06)}
+.search{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:6px 12px;font-size:12px;color:#F4F4F5;width:200px}
+/* KPI strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden}
+.strip-cell{padding:14px 18px;border-right:1px solid rgba(255,255,255,0.06)}
+.strip-cell:last-child{border-right:none}
+.strip-l{font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#5C5C66;font-weight:600;margin-bottom:6px}
+.strip-v{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#F4F4F5}
+/* table */
+.tbl-wrap{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{text-align:left;font-weight:500;color:#5C5C66;font-size:10.5px;text-transform:uppercase;letter-spacing:0.10em;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap}
+tbody td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,0.04);color:#C5C5CC;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,0.02)}
+.mono{font-variant-numeric:tabular-nums;font-family:'Inter',monospace}
+.num{text-align:right}
+.pill{display:inline-flex;font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:0.05em}
+.pill-ok{background:rgba(16,185,129,0.10);color:#34D399}
+.pill-warn{background:rgba(245,158,11,0.10);color:#FBBF24}
+.pill-bad{background:rgba(244,63,94,0.10);color:#FB7185}
+.pill-info{background:rgba(59,130,246,0.10);color:#60A5FA}
+.monto-pos{color:#34D399;font-weight:600;font-variant-numeric:tabular-nums}
+.monto-neg{color:#FB7185;font-weight:600;font-variant-numeric:tabular-nums}
+.day-row td{background:#0E0E12;font-size:11px;color:#5C5C66;font-weight:600;padding:6px 14px;border-bottom:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">F</div>
+    <div><div class="logo-name">Fenix Parser</div><div class="logo-sub">v2.4</div></div>
+  </div>
+  <div class="nav-item"><div class="nav-dot"></div>Dashboard</div>
+  <div class="nav-item"><div class="nav-dot"></div>Shows</div>
+  <div class="nav-item active"><div class="nav-dot"></div>Operaciones</div>
+  <div class="nav-item"><div class="nav-dot"></div>Subir archivo</div>
+  <div class="nav-item"><div class="nav-dot"></div>Configuración</div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title">Operaciones</div>
+    <div class="avatar">SM</div>
+  </div>
+  <div class="content">
+    <div class="filters">
+      <input class="search" placeholder="Buscar..." value="">
+      <div class="filter-btn active">Movistar Arena</div>
+      <div class="filter-btn">Tipo: Todos</div>
+      <div class="filter-btn">Caja: Fenix CA</div>
+      <div class="filter-btn">Jun 2026</div>
+      <div class="filter-btn">Pagos: Todos</div>
+    </div>
+
+    <div class="strip">
+      <div class="strip-cell"><div class="strip-l">Bruto periodo</div><div class="strip-v">$2.147.320</div></div>
+      <div class="strip-cell"><div class="strip-l">Operaciones</div><div class="strip-v">847</div></div>
+      <div class="strip-cell"><div class="strip-l">Devoluciones</div><div class="strip-v" style="color:#FB7185">12</div></div>
+      <div class="strip-cell"><div class="strip-l">Pendiente cobro</div><div class="strip-v" style="color:#FBBF24">$318.450</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Compra</th>
+            <th>Cobro</th>
+            <th>Tarjeta</th>
+            <th>Cuotas</th>
+            <th class="num">Bruto</th>
+            <th>Banco</th>
+            <th>Estado</th>
+            <th>Show</th>
+            <th>Comprob.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="day-row"><td colspan="9">14/06/2026 — 3 operaciones · $87.400</td></tr>
+          <tr>
+            <td class="mono">14/06/26</td><td class="mono">14/06/26</td>
+            <td><span class="pill pill-info">VISA</span></td>
+            <td>1</td>
+            <td class="num monto-pos">$42.500</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-ok">pagado</span></td>
+            <td>Movistar Arena</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419823</td>
+          </tr>
+          <tr>
+            <td class="mono">13/06/26</td><td class="mono">14/06/26</td>
+            <td><span class="pill pill-warn" style="background:rgba(251,191,36,0.10)">MASTER</span></td>
+            <td>3</td>
+            <td class="num monto-pos">$28.900</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-ok">pagado</span></td>
+            <td>Movistar Arena</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419824</td>
+          </tr>
+          <tr>
+            <td class="mono">14/06/26</td><td class="mono">14/06/26</td>
+            <td><span class="pill pill-info">VISA</span></td>
+            <td>6</td>
+            <td class="num monto-pos">$16.000</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-ok">pagado</span></td>
+            <td>Movistar Arena</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419825</td>
+          </tr>
+          <tr class="day-row"><td colspan="9">13/06/2026 — 4 operaciones · $112.800</td></tr>
+          <tr>
+            <td class="mono">12/06/26</td><td class="mono">13/06/26</td>
+            <td><span class="pill" style="background:rgba(167,139,250,0.10);color:#A78BFA">AMEX</span></td>
+            <td>1</td>
+            <td class="num monto-pos">$55.000</td>
+            <td class="mono" style="color:#5C5C66">330</td>
+            <td><span class="pill pill-ok">pagado</span></td>
+            <td>Movistar Arena</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419800</td>
+          </tr>
+          <tr>
+            <td class="mono">11/06/26</td><td class="mono">13/06/26</td>
+            <td><span class="pill pill-info">VISA</span></td>
+            <td>12</td>
+            <td class="num monto-pos">$38.400</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-ok">pagado</span></td>
+            <td>Movistar Arena</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419801</td>
+          </tr>
+          <tr>
+            <td class="mono">13/06/26</td><td class="mono">13/06/26</td>
+            <td><span class="pill pill-warn" style="background:rgba(251,191,36,0.10)">MASTER</span></td>
+            <td>1</td>
+            <td class="num monto-neg">−$12.000</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-bad">devuelto</span></td>
+            <td>Movistar Arena</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419802</td>
+          </tr>
+          <tr>
+            <td class="mono">10/06/26</td><td class="mono">13/06/26</td>
+            <td><span class="pill pill-info">VISA</span></td>
+            <td>6</td>
+            <td class="num monto-pos">$31.400</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-ok">pagado</span></td>
+            <td>Movistar Arena</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419803</td>
+          </tr>
+          <tr class="day-row"><td colspan="9">10/06/2026 — 2 operaciones · $68.200</td></tr>
+          <tr>
+            <td class="mono">09/06/26</td><td class="mono">10/06/26</td>
+            <td><span class="pill pill-info">VISA</span></td>
+            <td>1</td>
+            <td class="num monto-pos">$44.700</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-warn">pendiente</span></td>
+            <td>Luna Park</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419780</td>
+          </tr>
+          <tr>
+            <td class="mono">08/06/26</td><td class="mono">10/06/26</td>
+            <td><span class="pill pill-warn" style="background:rgba(251,191,36,0.10)">MASTER</span></td>
+            <td>3</td>
+            <td class="num monto-pos">$23.500</td>
+            <td class="mono" style="color:#5C5C66">310</td>
+            <td><span class="pill pill-warn">pendiente</span></td>
+            <td>Luna Park</td>
+            <td class="mono" style="font-size:10.5px;color:#5C5C66">00419781</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

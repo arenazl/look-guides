@@ -1,3 +1,5 @@
 .DS_Store
 Thumbs.db
 *.log
+/index.html
+apps/*/index.html

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenix Parser — Comisiones</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#08080B;color:#F4F4F5;min-height:100vh;display:flex}
+.sidebar{width:220px;background:#0E0E12;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:16px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#FF7A1F,#FF3366);border-radius:9px;display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:14px}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.logo-sub{font-size:10px;color:#5C5C66;margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;color:#8E8E99;border-left:2px solid transparent}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.5}
+.nav-item.active{color:#F4F4F5;background:rgba(255,122,31,0.06);border-left-color:#FF7A1F}
+.nav-item.active .nav-dot{background:#FF7A1F;opacity:1}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:56px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.page-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF7A1F,#FF3366);display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.content{flex:1;padding:28px;display:flex;flex-direction:column;gap:20px;overflow:auto}
+.tabs{display:flex;gap:2px;padding:3px;background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:10px;width:fit-content;margin-bottom:4px}
+.tab{padding:6px 14px;border-radius:7px;font-size:12px;font-weight:500;color:#5C5C66;cursor:pointer}
+.tab.active{background:#1B1B22;color:#F4F4F5;box-shadow:0 1px 2px rgba(0,0,0,0.25)}
+.card{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden}
+.card-head{padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600}
+.card-sub{font-size:12px;color:#5C5C66}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{text-align:center;font-weight:500;color:#5C5C66;font-size:10.5px;text-transform:uppercase;letter-spacing:0.10em;padding:10px 20px;border-bottom:1px solid rgba(255,255,255,0.06)}
+thead th:first-child{text-align:left}
+tbody td{padding:13px 20px;border-bottom:1px solid rgba(255,255,255,0.04);color:#C5C5CC;text-align:center}
+tbody td:first-child{text-align:left;font-weight:600;color:#F4F4F5}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,0.02)}
+.pct{font-variant-numeric:tabular-nums;font-weight:600;color:#F4F4F5}
+.pct-high{color:#FB7185}
+.chip{display:inline-flex;align-items:center;gap:5px;background:#1B1B22;border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:3px 8px;font-size:11px;color:#8E8E99}
+.chip-active{background:rgba(255,122,31,0.08);border-color:rgba(255,122,31,0.25);color:#FF7A1F}
+.mode-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.mode-card{background:#14141A;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px;cursor:pointer;transition:all 120ms}
+.mode-card.selected{border-color:rgba(255,122,31,0.4);background:rgba(255,122,31,0.05)}
+.mode-name{font-size:12px;font-weight:600;color:#F4F4F5;margin-bottom:4px}
+.mode-desc{font-size:10.5px;color:#5C5C66;line-height:1.5}
+.mode-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.08);margin-bottom:8px}
+.mode-card.selected .mode-dot{background:#FF7A1F}
+.btn-sm{background:linear-gradient(135deg,#FF7A1F,#FF3366);border:none;border-radius:7px;padding:6px 12px;font-size:11.5px;font-weight:600;color:#fff;cursor:pointer;font-family:'Inter',sans-serif}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">F</div>
+    <div><div class="logo-name">Fenix Parser</div><div class="logo-sub">v2.4</div></div>
+  </div>
+  <div class="nav-item"><div class="nav-dot"></div>Dashboard</div>
+  <div class="nav-item"><div class="nav-dot"></div>Shows</div>
+  <div class="nav-item"><div class="nav-dot"></div>Operaciones</div>
+  <div class="nav-item"><div class="nav-dot"></div>Subir archivo</div>
+  <div class="nav-item active"><div class="nav-dot"></div>Configuración</div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title">Configuracion de comisiones</div>
+    <div class="avatar">SM</div>
+  </div>
+  <div class="content">
+
+    <div class="tabs">
+      <div class="tab">Global</div>
+      <div class="tab active">Por tarjeta</div>
+      <div class="tab">Por show</div>
+      <div class="tab">Wizard cuotas</div>
+      <div class="tab">Mixto</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Modo activo</div>
+          <div class="card-sub" style="margin-top:3px">Selecciona como se calculan las comisiones en los reportes</div>
+        </div>
+        <button class="btn-sm">Guardar cambios</button>
+      </div>
+      <div style="padding:20px 24px">
+        <div class="mode-grid">
+          <div class="mode-card"><div class="mode-dot"></div><div class="mode-name">Global</div><div class="mode-desc">Una tasa unica para todas las operaciones</div></div>
+          <div class="mode-card selected"><div class="mode-dot"></div><div class="mode-name">Por tarjeta</div><div class="mode-desc">Tasa distinta segun la tarjeta usada</div></div>
+          <div class="mode-card"><div class="mode-dot"></div><div class="mode-name">Por show</div><div class="mode-desc">Comision diferente por cada show</div></div>
+          <div class="mode-card"><div class="mode-dot"></div><div class="mode-name">Wizard cuotas</div><div class="mode-desc">Tabla tarjeta x cuotas completa</div></div>
+          <div class="mode-card"><div class="mode-dot"></div><div class="mode-name">Mixto</div><div class="mode-desc">Base global + ajuste por tarjeta</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Tasas por tarjeta y cuotas</div>
+          <div class="card-sub" style="margin-top:3px">Los valores se aplican sobre el bruto de cada operacion</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <span class="chip chip-active">Modo activo</span>
+          <span class="chip">Vigente desde 01/05/2026</span>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Tarjeta</th>
+            <th>1 cuota</th>
+            <th>2–3 cuotas</th>
+            <th>4–6 cuotas</th>
+            <th>7–12 cuotas</th>
+            <th>13–24 cuotas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#60A5FA"></div>VISA</div></td>
+            <td><span class="pct">3.20%</span></td>
+            <td><span class="pct">3.80%</span></td>
+            <td><span class="pct">4.10%</span></td>
+            <td><span class="pct">5.30%</span></td>
+            <td><span class="pct pct-high">6.80%</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#FBBF24"></div>MASTERCARD</div></td>
+            <td><span class="pct">3.20%</span></td>
+            <td><span class="pct">3.80%</span></td>
+            <td><span class="pct">4.20%</span></td>
+            <td><span class="pct">5.50%</span></td>
+            <td><span class="pct pct-high">7.00%</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#A78BFA"></div>AMEX</div></td>
+            <td><span class="pct">3.50%</span></td>
+            <td><span class="pct">4.10%</span></td>
+            <td><span class="pct">4.80%</span></td>
+            <td><span class="pct">6.00%</span></td>
+            <td><span class="pct pct-high">7.50%</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#34D399"></div>CABAL</div></td>
+            <td><span class="pct">2.80%</span></td>
+            <td><span class="pct">3.20%</span></td>
+            <td><span class="pct">3.90%</span></td>
+            <td><span class="pct">4.80%</span></td>
+            <td><span class="pct pct-high">6.00%</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#2DD4BF"></div>NARANJA</div></td>
+            <td><span class="pct">3.00%</span></td>
+            <td><span class="pct">3.50%</span></td>
+            <td><span class="pct">4.00%</span></td>
+            <td><span class="pct">5.00%</span></td>
+            <td><span class="pct pct-high">6.20%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

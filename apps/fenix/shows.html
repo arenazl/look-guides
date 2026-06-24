@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenix Parser — Shows</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#08080B;color:#F4F4F5;min-height:100vh;display:flex}
+.sidebar{width:220px;background:#0E0E12;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:16px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#FF7A1F,#FF3366);border-radius:9px;display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:14px}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.logo-sub{font-size:10px;color:#5C5C66;margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;color:#8E8E99;border-left:2px solid transparent}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.5}
+.nav-item.active{color:#F4F4F5;background:rgba(255,122,31,0.06);border-left-color:#FF7A1F}
+.nav-item.active .nav-dot{background:#FF7A1F;opacity:1}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:56px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.page-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.btn{background:linear-gradient(135deg,#FF7A1F,#FF3366);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#fff;cursor:pointer;font-family:'Inter',sans-serif}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF7A1F,#FF3366);display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.content{flex:1;padding:28px;display:flex;flex-direction:column;gap:20px;overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.show-card{background:#0E0E12;border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform 180ms,border-color 180ms,box-shadow 180ms}
+.show-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.12);box-shadow:0 16px 40px -12px rgba(0,0,0,0.5),0 4px 12px rgba(255,122,31,0.08)}
+.cover{aspect-ratio:16/9;position:relative;display:flex;align-items:center;justify-content:center}
+.cover-letter{font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:rgba(255,255,255,0.85);letter-spacing:-0.04em;z-index:1}
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,11,0.05) 0%,rgba(8,8,11,0.35) 55%,rgba(8,8,11,0.92) 100%)}
+.pill{display:inline-flex;font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:0.05em}
+.pill-ok{background:rgba(16,185,129,0.10);color:#34D399}
+.pill-warn{background:rgba(245,158,11,0.10);color:#FBBF24}
+.pill-bad{background:rgba(244,63,94,0.10);color:#FB7185}
+.card-body{padding:16px}
+.card-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#F4F4F5;margin-bottom:4px}
+.card-venue{font-size:11.5px;color:#5C5C66;margin-bottom:10px}
+.card-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.meta-k{font-size:9.5px;text-transform:uppercase;letter-spacing:0.10em;color:#5C5C66;font-weight:600;margin-bottom:2px}
+.meta-v{font-size:12px;color:#C5C5CC;font-weight:500}
+.card-footer{border-top:1px solid rgba(255,255,255,0.04);padding-top:12px;display:flex;align-items:center;justify-content:space-between}
+.bruto{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#F4F4F5}
+.bruto-label{font-size:10px;color:#5C5C66;margin-top:1px}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">F</div>
+    <div><div class="logo-name">Fenix Parser</div><div class="logo-sub">v2.4</div></div>
+  </div>
+  <div class="nav-item"><div class="nav-dot"></div>Dashboard</div>
+  <div class="nav-item active"><div class="nav-dot"></div>Shows</div>
+  <div class="nav-item"><div class="nav-dot"></div>Operaciones</div>
+  <div class="nav-item"><div class="nav-dot"></div>Subir archivo</div>
+  <div class="nav-item"><div class="nav-dot"></div>Configuración</div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title">Shows</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="btn">+ Nuevo show</button>
+      <div class="avatar">SM</div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="grid">
+
+      <div class="show-card">
+        <div class="cover" style="background:linear-gradient(135deg,#FF7A1F 0%,#FF3366 50%,#A78BFA 100%)">
+          <div class="cover-overlay"></div>
+          <div class="cover-letter">M</div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-name">Movistar Arena</div>
+            <span class="pill pill-ok">activo</span>
+          </div>
+          <div class="card-venue">Movistar Arena · Buenos Aires</div>
+          <div class="card-meta">
+            <div><div class="meta-k">Fecha</div><div class="meta-v">14 Jun 2026</div></div>
+            <div><div class="meta-k">Cuenta</div><div class="meta-v">Movistar Arena CA</div></div>
+            <div><div class="meta-k">Operaciones</div><div class="meta-v">847</div></div>
+            <div><div class="meta-k">Pendiente cobro</div><div class="meta-v" style="color:#FBBF24">$318K</div></div>
+          </div>
+          <div class="card-footer">
+            <div><div class="bruto">$2.147.320</div><div class="bruto-label">bruto acumulado</div></div>
+            <span class="pill" style="background:rgba(255,122,31,0.10);color:#FF7A1F">Fenix</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-card">
+        <div class="cover" style="background:linear-gradient(135deg,#A78BFA 0%,#60A5FA 100%)">
+          <div class="cover-overlay"></div>
+          <div class="cover-letter">L</div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-name">Luna Park</div>
+            <span class="pill pill-ok">activo</span>
+          </div>
+          <div class="card-venue">Luna Park · Buenos Aires</div>
+          <div class="card-meta">
+            <div><div class="meta-k">Fecha</div><div class="meta-v">28 Jun 2026</div></div>
+            <div><div class="meta-k">Cuenta</div><div class="meta-v">Fenix CA</div></div>
+            <div><div class="meta-k">Operaciones</div><div class="meta-v">512</div></div>
+            <div><div class="meta-k">Pendiente cobro</div><div class="meta-v" style="color:#FBBF24">$201K</div></div>
+          </div>
+          <div class="card-footer">
+            <div><div class="bruto">$1.498.700</div><div class="bruto-label">bruto acumulado</div></div>
+            <span class="pill" style="background:rgba(255,122,31,0.10);color:#FF7A1F">Fenix</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-card">
+        <div class="cover" style="background:linear-gradient(135deg,#2DD4BF 0%,#34D399 100%)">
+          <div class="cover-overlay"></div>
+          <div class="cover-letter">T</div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-name">Teatro Gran Rex</div>
+            <span class="pill pill-warn">próximo</span>
+          </div>
+          <div class="card-venue">Teatro Gran Rex · Buenos Aires</div>
+          <div class="card-meta">
+            <div><div class="meta-k">Fecha</div><div class="meta-v">5 Jul 2026</div></div>
+            <div><div class="meta-k">Cuenta</div><div class="meta-v">Fenix CA</div></div>
+            <div><div class="meta-k">Operaciones</div><div class="meta-v">183</div></div>
+            <div><div class="meta-k">Días restantes</div><div class="meta-v" style="color:#FBBF24">12 días</div></div>
+          </div>
+          <div class="card-footer">
+            <div><div class="bruto">$487.200</div><div class="bruto-label">bruto acumulado</div></div>
+            <span class="pill" style="background:rgba(255,122,31,0.10);color:#FF7A1F">Fenix</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-card">
+        <div class="cover" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%)">
+          <div class="cover-overlay"></div>
+          <div class="cover-letter">E</div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="card-name">Estadio Obras</div>
+            <span class="pill pill-warn">próximo</span>
+          </div>
+          <div class="card-venue">Estadio Obras · Buenos Aires</div>
+          <div class="card-meta">
+            <div><div class="meta-k">Fecha</div><div class="meta-v">19 Jul 2026</div></div>
+            <div><div class="meta-k">Cuenta</div><div class="meta-v">Fenix CA</div></div>
+            <div><div class="meta-k">Operaciones</div><div class="meta-v">67</div></div>
+            <div><div class="meta-k">Días restantes</div><div class="meta-v" style="color:#FBBF24">26 días</div></div>
+          </div>
+          <div class="card-footer">
+            <div><div class="bruto">$198.400</div><div class="bruto-label">bruto acumulado</div></div>
+            <span class="pill" style="background:rgba(255,122,31,0.10);color:#FF7A1F">Fenix</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sin vueltas ¡YA! — Servicio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#7C3AED;--pri-d:#6D28D9;--acc:#FFB800;--ink:#15131f;--ink3:#8a8699;--bg:#f6f5fa;--line:#ecebf2}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:radial-gradient(120% 60% at 50% 0,#efe9ff,#e6e4ee);min-height:100vh;display:flex;justify-content:center}
+.app{width:412px;min-height:100vh;background:var(--bg);box-shadow:0 30px 80px rgba(40,20,80,.18);overflow:hidden}
+.serif{font-family:'Instrument Serif',serif}
+.top{background:linear-gradient(135deg,var(--pri),var(--pri-d));padding:12px 14px;color:#fff;display:flex;align-items:center;gap:10px}
+.back{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;flex-shrink:0}
+.back svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.4}
+.brand-name{font-size:16px;font-style:italic}.brand-name b{font-style:normal;font-weight:700}
+.hero{height:170px;background:linear-gradient(135deg,#4338ca,#7C3AED);position:relative}
+.bc{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.92);color:var(--ink);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.body{padding:16px}
+.h-t{font-size:24px;color:var(--ink);line-height:1.1;letter-spacing:-.01em}
+.meta{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--ink3)}
+.rate{display:inline-flex;align-items:center;gap:3px;font-weight:700;color:var(--ink)}
+.rate svg{width:13px;height:13px;fill:var(--acc);stroke:none}
+.dot{width:3px;height:3px;border-radius:50%;background:var(--ink3)}
+.lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin:18px 0 8px}
+.pack{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.pack.sel{border-color:var(--pri);background:#f7f3ff}
+.pack-n{font-size:13.5px;font-weight:700;color:var(--ink)}
+.pack-d{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.pack-p{font-size:15px;font-weight:800;color:var(--ink)}
+.pay{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:6px}
+.pay-row{display:flex;justify-content:space-between;font-size:13px;margin:5px 0}
+.pay-row .k{color:var(--ink3)}.pay-row .v{font-weight:700;color:var(--ink)}
+.pay-row.big .v{font-size:16px;color:var(--pri)}
+.cta{margin-top:14px;background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff;text-align:center;padding:15px;border-radius:14px;font-size:15px;font-weight:700;box-shadow:0 8px 22px rgba(124,58,237,.34)}
+.shield{display:flex;gap:9px;align-items:flex-start;margin-top:12px;background:#eafaf0;border:1px solid #c7eed7;border-radius:12px;padding:11px}
+.shield svg{width:18px;height:18px;stroke:#16a34a;fill:none;stroke-width:2;flex-shrink:0;margin-top:1px}
+.shield p{font-size:11.5px;color:#15603a;line-height:1.45}
+.shield b{color:#0f4429}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div class="brand-name serif">sin vueltas <b>¡YA!</b></div>
+  </div>
+  <div class="hero"><span class="bc">Fotografía</span></div>
+  <div class="body">
+    <div class="h-t serif">Fotografía de bodas — día completo</div>
+    <div class="meta"><span class="rate"><svg viewBox="0 0 24 24"><path d="M12 2l3 7 7 .5-5.5 4.5 2 7-6.5-4-6.5 4 2-7L2 9.5 9 9z"/></svg>4,9</span><span>(128)</span><span class="dot"></span><span>Estudio Aurora</span><span class="dot"></span><span>Palermo</span></div>
+
+    <div class="lbl">Elegí tu paquete</div>
+    <div class="pack"><div><div class="pack-n">Básico — 6 horas</div><div class="pack-d">Cobertura + 200 fotos editadas</div></div><div class="pack-p">$121.000</div></div>
+    <div class="pack sel"><div><div class="pack-n">Premium — día completo</div><div class="pack-d">2 fotógrafos + álbum + video corto</div></div><div class="pack-p">$278.000</div></div>
+
+    <div class="lbl">Forma de pago</div>
+    <div class="pay">
+      <div class="pay-row big"><span class="k">Seña (30%)</span><span class="v">$83.400</span></div>
+      <div class="pay-row"><span class="k">Saldo al evento</span><span class="v">$194.600</span></div>
+    </div>
+
+    <div class="cta">Reservar fecha con seña</div>
+    <div class="shield">
+      <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      <p><b>Pago protegido.</b> La seña queda en garantía y se le libera al proveedor recién después del evento.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

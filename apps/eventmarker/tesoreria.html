@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sin vueltas ¡YA! — Tesorería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#7C3AED;--pri-d:#6D28D9;--acc:#FFB800;--ink:#15131f;--ink3:#8a8699;--bg:#f6f5fa;--line:#ecebf2}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:radial-gradient(120% 60% at 50% 0,#efe9ff,#e6e4ee);min-height:100vh;display:flex;justify-content:center}
+.app{width:412px;min-height:100vh;background:var(--bg);box-shadow:0 30px 80px rgba(40,20,80,.18);overflow:hidden}
+.serif{font-family:'Instrument Serif',serif}
+.top{background:linear-gradient(135deg,var(--pri),var(--pri-d));padding:14px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.brand-name{font-size:16px;font-style:italic}.brand-name b{font-style:normal;font-weight:700}
+.per{font-size:11.5px;background:rgba(255,255,255,.18);padding:5px 10px;border-radius:20px}
+.hd{padding:16px 16px 4px}
+.hd h1{font-size:23px;color:var(--ink);letter-spacing:-.01em}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;overflow:hidden}
+.kpi .rail{position:absolute;left:0;top:0;bottom:0;width:3px}
+.kpi .l{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);font-weight:700;margin-bottom:9px}
+.kpi .v{font-size:21px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1}
+.kpi .v .c{font-size:13px;font-weight:600;color:var(--ink3)}
+.kpi .f{font-size:11px;color:var(--ink3);margin-top:7px}
+.ok{color:#16a34a;font-weight:700}
+.lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);padding:10px 16px 8px}
+.mv{padding:0 16px 20px;display:flex;flex-direction:column;gap:0}
+.row{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.ic svg{width:16px;height:16px;fill:none;stroke-width:2}
+.r-i{flex:1;min-width:0}
+.r-t{font-size:13px;font-weight:600;color:var(--ink)}
+.r-s{font-size:11px;color:var(--ink3);margin-top:2px}
+.r-a{font-size:13.5px;font-weight:800;text-align:right}
+.pos{color:#16a34a}.neg{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="brand-name serif">sin vueltas <b>¡YA!</b></div><span class="per">Marzo 2026</span></div>
+  <div class="hd"><h1 class="serif">Tesorería</h1></div>
+  <div class="kpis">
+    <div class="kpi"><div class="rail" style="background:var(--pri)"></div><div class="l">Ingresos del mes</div><div class="v"><span class="c">$</span>2.480.000</div><div class="f"><span class="ok">+18%</span> vs. febrero</div></div>
+    <div class="kpi"><div class="rail" style="background:var(--acc)"></div><div class="l">Comisiones</div><div class="v"><span class="c">$</span>248.000</div><div class="f">10% sobre reservas</div></div>
+    <div class="kpi"><div class="rail" style="background:#3b82f6"></div><div class="l">Reservas</div><div class="v">86</div><div class="f"><span class="ok">+14</span> este mes</div></div>
+    <div class="kpi"><div class="rail" style="background:#16a34a"></div><div class="l">A liberar</div><div class="v"><span class="c">$</span>410.000</div><div class="f">en garantía (escrow)</div></div>
+  </div>
+  <div class="lbl">Movimientos recientes</div>
+  <div class="mv">
+    <div class="row">
+      <div class="ic" style="background:#eafaf0"><svg viewBox="0 0 24 24" stroke="#16a34a"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+      <div class="r-i"><div class="r-t">Seña recibida — Casamiento</div><div class="r-s">Estudio Aurora · hoy 11:20</div></div>
+      <div class="r-a pos">+$83.400</div>
+    </div>
+    <div class="row">
+      <div class="ic" style="background:#ede9fe"><svg viewBox="0 0 24 24" stroke="#6d28d9"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="r-i"><div class="r-t">Comisión plataforma</div><div class="r-s">Reserva #1042 · hoy 11:20</div></div>
+      <div class="r-a pos">+$8.340</div>
+    </div>
+    <div class="row">
+      <div class="ic" style="background:#fff5d6"><svg viewBox="0 0 24 24" stroke="#9a6b00"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div>
+      <div class="r-i"><div class="r-t">Pago liberado a proveedor</div><div class="r-s">DJ Set — San Isidro · ayer</div></div>
+      <div class="r-a neg">-$66.500</div>
+    </div>
+    <div class="row">
+      <div class="ic" style="background:#eafaf0"><svg viewBox="0 0 24 24" stroke="#16a34a"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+      <div class="r-i"><div class="r-t">Seña recibida — Cumpleaños 15</div><div class="r-s">Catering Del Sur · ayer</div></div>
+      <div class="r-a pos">+$54.000</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
