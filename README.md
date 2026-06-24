@@ -1,45 +1,50 @@
 # look-guides — Hub de documentación
 
-Hub central de documentación técnica. Cada **aplicación** tiene su **carpeta** con páginas estáticas (capturas, tutoriales de cómo funciona la app), y se enlaza desde la home.
+Hub central donde cada proyecto publica sus **páginas estáticas** (capturas, tutoriales de cómo funciona la app). El índice se arma **solo**: vos subís tu carpeta y aparece automáticamente.
 
-- Sitio: https://look-guides.netlify.app — **deploy continuo**: cada `git push` a `master` publica solo.
-- Repo **público**. Lo administra el proyecto "structure"; cualquier app puede sumar su carpeta.
+- **Repo:** `arenazl/look-guides` → https://github.com/arenazl/look-guides (branch `master`)
+- **Sitio:** https://look-guides.netlify.app — **deploy continuo** (cada push publica).
+- Lo administra el proyecto **structure**. Vos solo subís tu carpeta; no toques nada más.
 
-## Estructura
+## Cómo funciona (importante)
 
-```
-/index.html              hub: una card por APLICACION (linkea a /<app>/)
-/<app>/index.html        sub-home de la app: lista sus paginas/capturas
-/<app>/<pagina>.html     cada pagina estatica (captura, tutorial)
-/<app>/img/...           imagenes/assets de esa app (si hacen falta)
-/README.md               este protocolo
-```
+NO se edita el index a mano. En cada deploy, Netlify corre `build.js`, que **escanea `/apps/`** y genera:
+- el **índice del hub** (una tarjeta por app),
+- y un **sub-índice dentro de cada app** que lista sus páginas.
 
-Ejemplo real: la carpeta `infraestructura/` (con su `index.html`).
+O sea: vos subís `apps/<tu-app>/*.html` y **el hub se actualiza solo**. Por eso las apps nunca se pisan: cada una vive en su carpeta y nadie edita el index.
 
-## Cómo agregar tu app
+## Cómo publicar tu app (paso a paso)
 
-1. Cloná fresco o actualizá (SIEMPRE, antes de tocar nada):
+1. Cloná o actualizá (siempre antes de tocar):
    ```
    git clone https://github.com/arenazl/look-guides.git
-   # o, si ya lo tenés:  git pull origin master
+   # o, si ya lo tenés:  git pull --rebase origin master
    ```
-2. Creá tu carpeta `<app>/` con un `index.html` (sub-home que lista tus páginas) y tus `.html`/imágenes adentro. Usá Tailwind por CDN, sin emojis, mismo estilo que `infraestructura/index.html`.
-3. Enlazá tu app desde la home `index.html` (**solo la primera vez**, al dar de alta la app):
-   - link en la botonera, dentro del bloque `<!-- NAV-LINKS -->`:
-     `<a href="mi-app/" class="px-3 py-2 rounded hover:bg-slate-800">Mi App</a>`
-   - card en el grid, dentro del bloque `<!-- CARDS -->`: copiá la card de Infraestructura y apuntá `href="mi-app/"`.
-4. Commit y push:
+2. Tu app va en **`apps/<tu-app>/`**. Si tu carpeta no existe, **creala** — el nombre de la carpeta es el nombre de tu app (minúsculas/kebab-case, ej. `apps/mi-app/`). Esa carpeta es tuya.
+3. Poné ahí tus **HTML estáticos** (uno por pantalla/captura) e imágenes/SVG si hacen falta. Usá Tailwind por CDN, sin emojis.
+   - **IMPORTANTE — el `<title>` manda.** Poné en cada HTML:
+     `<title>Nombre De Tu App — Nombre De La Página</title>`
+     El hub usa la parte antes del `—` como **nombre de la app** (en la tarjeta) y la de después como **nombre de la página**. Ej: `<title>Mi App — Dashboard</title>`.
+4. **No toques** `index.html`, `build.js`, `netlify.toml`, ni las carpetas de otras apps. El index es **generado** (de hecho no está en el repo, lo crea el build).
+5. Commit y push:
    ```
-   git add <app>/ index.html
-   git commit -m "docs(<app>): agrega app"
+   git add apps/<tu-app>/
+   git commit -m "docs(<tu-app>): agrega/actualiza paginas"
    git push origin master
    ```
-5. Si el push **rebota**: `git pull --rebase origin master` y push de nuevo.
+   Si el push **rebota**: `git pull --rebase origin master` y push de nuevo. (Casi nunca hay conflicto, porque cada uno trabaja en su carpeta.)
+6. En ~1-2 min: tu app aparece en https://look-guides.netlify.app con su tarjeta, y dentro tus páginas.
 
-**Para agregar MÁS páginas a una app que ya existe:** solo agregás `.html` dentro de `<app>/` y los linkeás desde `<app>/index.html`. **No tocás la home → cero conflicto.**
+## Navegación resultante
+
+```
+look-guides.netlify.app/                      -> hub (una card por app)
+look-guides.netlify.app/apps/<tu-app>/        -> tus páginas (sub-índice auto-generado)
+look-guides.netlify.app/apps/<tu-app>/x.html  -> cada página tuya
+```
 
 ## Reglas de oro
-- **Pull (o `pull --rebase`) antes de push.** La home (`index.html`) es lo único compartido.
-- Cada app trabaja DENTRO de su carpeta. No toques carpetas ni cards de otras apps.
-- En ~1-2 min de pushear ya queda publicado en https://look-guides.netlify.app.
+- Cada app trabaja **solo dentro de `apps/<su-nombre>/`**. No toques lo ajeno ni el index.
+- `pull --rebase` antes de push.
+- El `<title>` con formato `App — Página` es lo que hace que tu app y tus páginas salgan bien nombradas en el hub.
