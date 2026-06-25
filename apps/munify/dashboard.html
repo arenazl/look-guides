@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Munify — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#112a6c;--blue:#3f6ac8;--green:#18a24d;--gold:#C8A24E;--cream:#F1EAD8;--ink:#0E1830;--muted:#6B7280;--line:#E2D9C8;--surface:#fff}
+body{font-family:'Inter',sans-serif;background:#f8f9fc;color:var(--ink);min-height:100vh}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+/* sidebar */
+.sidebar{background:var(--navy);padding:24px 0;display:flex;flex-direction:column}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 20px 28px}
+.s-logo{width:32px;height:32px}
+.s-name{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:#fff}
+.s-sect{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.3);padding:0 20px;margin:18px 0 8px}
+.s-sect:first-of-type{margin-top:0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.6);font-size:13px;font-weight:500;cursor:pointer}
+.nav-item.active{background:rgba(255,255,255,.1);color:#fff;font-weight:600;border-left:3px solid var(--green)}
+.nav-item svg{width:17px;height:17px;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding:18px 20px 0;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.user-av{width:34px;height:34px;border-radius:50%;background:rgba(63,106,200,.3);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.user-info p{font-size:13px;font-weight:600;color:#fff}
+.user-info small{font-size:11px;color:rgba(255,255,255,.4)}
+/* topbar */
+.topbar{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:14px 28px;background:#f8f9fc;border-bottom:1px solid #eaecf0;position:sticky;top:0;z-index:10}
+.topbar-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted);cursor:pointer}
+.topbar-icon:hover{background:#eaecf0}
+.topbar-icon svg{width:16px;height:16px}
+/* main */
+.main{display:flex;flex-direction:column;overflow:auto}
+.content{padding:28px 32px;flex:1}
+.page-title{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.page-sub{color:var(--muted);font-size:13px;margin-bottom:26px}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.kpi{background:var(--surface);border:1px solid #eaecf0;border-radius:16px;padding:18px 20px}
+.kpi-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.kpi-val{font-family:'Fraunces',serif;font-size:34px;font-weight:600;color:var(--navy);margin-top:8px;line-height:1}
+.kpi-foot{font-size:12px;margin-top:6px}
+.up{color:#16a34a}.dn{color:#dc2626}.neu{color:var(--muted)}
+.bar-mini{height:4px;border-radius:2px;background:#eaecf0;overflow:hidden;margin-top:10px}
+.bar-mini-fill{height:100%;border-radius:2px}
+/* row de dos y tres */
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:18px}
+.card{background:var(--surface);border:1px solid #eaecf0;border-radius:16px;padding:20px 22px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--navy)}
+.link{font-size:12px;font-weight:600;color:var(--blue);cursor:pointer}
+/* mini chart donut */
+.donut-wrap{display:flex;align-items:center;gap:20px}
+.donut{width:100px;height:100px;flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:8px;flex:1}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-label{color:var(--muted);flex:1}
+.legend-val{font-weight:700;color:var(--ink)}
+/* actividad */
+.act-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f2f5}
+.act-row:last-child{border-bottom:none}
+.act-ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.act-ico svg{width:17px;height:17px}
+.act-info{flex:1}
+.act-info p{font-size:13px;font-weight:500;color:var(--ink)}
+.act-info small{font-size:11px;color:var(--muted)}
+.act-time{font-size:11px;color:var(--muted)}
+/* modulos row */
+.mods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mod-card{border:1px solid #eaecf0;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;background:var(--surface)}
+.mod-ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.mod-ico svg{width:18px;height:18px}
+.mod-name{font-size:13px;font-weight:600;color:var(--ink)}
+.mod-val{font-size:11px;color:var(--muted);margin-top:2px}
+.mod-badge{margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="s-logo" viewBox="0 0 1446.79 1426" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon fill="#aebee0" points="1271.65 371.24 1271.65 1069.5 635.82 1426 0 1069.5 0 356.5 635.82 0 1128.59 276.29 1000.48 381.26 636.9 177.4 160.18 444.69 160.18 979.27 636.9 1246.56 1113.62 979.27 1113.62 544.87 1271.65 371.24"/>
+        <polygon fill="#18a24d" points="1446.79 79.97 1225.77 330.78 1113.62 458.05 644.86 989.99 448.06 781.76 448.06 568.98 637.63 759.38 1052.94 410.67 1179.19 304.66 1446.79 79.97"/>
+        <polygon fill="#aebee0" points="404.64 517.83 404.64 1037.89 253.8 953.49 253.8 500.38 332.09 454.86 404.64 517.83"/>
+        <polygon fill="#aebee0" points="1020.14 650.78 1020.14 954.08 867.22 1039.31 868.09 818.95 1020.14 650.78"/>
+      </svg>
+      <div class="s-name">Munify</div>
+    </div>
+    <div class="s-sect">Principal</div>
+    <div class="nav-item active"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Reclamos</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z"/></svg>Tramites</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Mapa</div>
+    <div class="s-sect">Tesoreria</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>Pagos</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V7m0 9v1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Cajas</div>
+    <div class="s-sect">Sueldos</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>Empleados</div>
+    <div class="s-sect">Programacion</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Turnos</div>
+    <div class="sidebar-footer">
+      <div class="user-av">JP</div>
+      <div class="user-info"><p>Juan Perez</p><small>Administrador</small></div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+    </div>
+    <div class="content">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub">San Pedro Norte — Junio 2026</div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Reclamos activos</div>
+          <div class="kpi-val">27</div>
+          <div class="kpi-foot dn">12 con alta prioridad</div>
+          <div class="bar-mini"><div class="bar-mini-fill" style="width:55%;background:#dc2626"></div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Tramites en curso</div>
+          <div class="kpi-val">34</div>
+          <div class="kpi-foot neu">+8 esta semana</div>
+          <div class="bar-mini"><div class="bar-mini-fill" style="width:40%;background:var(--blue)"></div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Turnos hoy</div>
+          <div class="kpi-val">18</div>
+          <div class="kpi-foot up">14 confirmados</div>
+          <div class="bar-mini"><div class="bar-mini-fill" style="width:78%;background:var(--green)"></div></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Egresos del mes</div>
+          <div class="kpi-val" style="font-size:22px">$4.28M</div>
+          <div class="kpi-foot dn">+8.2% vs mayo</div>
+          <div class="bar-mini"><div class="bar-mini-fill" style="width:68%;background:var(--gold)"></div></div>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Reclamos por estado</div><span class="link">Ver todos</span></div>
+          <div class="donut-wrap">
+            <svg class="donut" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#eaecf0" stroke-width="3"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#3f6ac8" stroke-width="3" stroke-dasharray="89 11" stroke-dashoffset="25" transform="rotate(-90 18 18)"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="11 89" stroke-dashoffset="-64" transform="rotate(-90 18 18)"/>
+              <text x="18" y="20" text-anchor="middle" font-size="6" font-weight="700" fill="#112a6c">247</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#18a24d"></div><div class="legend-label">Resueltos</div><div class="legend-val">220</div></div>
+              <div class="legend-item"><div class="legend-dot" style="background:#3f6ac8"></div><div class="legend-label">En curso</div><div class="legend-val">15</div></div>
+              <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div><div class="legend-label">Nuevos</div><div class="legend-val">12</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Actividad reciente</div></div>
+          <div class="act-row">
+            <div class="act-ico" style="background:#dbeafe"><svg fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg></div>
+            <div class="act-info"><p>Nuevo reclamo — Bache Rivadavia</p><small>Vecino: M. Gonzalez</small></div>
+            <div class="act-time">hace 5m</div>
+          </div>
+          <div class="act-row">
+            <div class="act-ico" style="background:#dcfce7"><svg fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <div class="act-info"><p>Tramite aprobado — Habilitacion comercial</p><small>Op: J. Perez</small></div>
+            <div class="act-time">hace 22m</div>
+          </div>
+          <div class="act-row">
+            <div class="act-ico" style="background:#fef9c3"><svg fill="none" stroke="#ca8a04" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+            <div class="act-info"><p>Turno confirmado — Catastro 10:30</p><small>Vecino: R. Soria</small></div>
+            <div class="act-time">hace 1h</div>
+          </div>
+          <div class="act-row">
+            <div class="act-ico" style="background:#fee2e2"><svg fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>
+            <div class="act-info"><p>Pago cargado — Vialidad SRL $420.000</p><small>Tesoreria</small></div>
+            <div class="act-time">hace 2h</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Modulos activos</div></div>
+        <div class="mods">
+          <div class="mod-card"><div class="mod-ico" style="background:#dbeafe"><svg fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg></div><div><div class="mod-name">Reclamos</div><div class="mod-val">247 este mes</div></div><div class="mod-badge"></div></div>
+          <div class="mod-card"><div class="mod-ico" style="background:#dcfce7"><svg fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z"/></svg></div><div><div class="mod-name">Tramites</div><div class="mod-val">34 en curso</div></div><div class="mod-badge"></div></div>
+          <div class="mod-card"><div class="mod-ico" style="background:#fef3c7"><svg fill="none" stroke="#d97706" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div><div><div class="mod-name">Tesoreria</div><div class="mod-val">$4.28M jun</div></div><div class="mod-badge"></div></div>
+          <div class="mod-card"><div class="mod-ico" style="background:#f3e8ff"><svg fill="none" stroke="#9333ea" stroke-width="2" viewBox="0 0 24 24"><path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div><div class="mod-name">Contaduria</div><div class="mod-val">18 OPs pendientes</div></div><div class="mod-badge"></div></div>
+          <div class="mod-card"><div class="mod-ico" style="background:#fce7f3"><svg fill="none" stroke="#db2777" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg></div><div><div class="mod-name">Sueldos</div><div class="mod-val">142 empleados</div></div><div class="mod-badge"></div></div>
+          <div class="mod-card"><div class="mod-ico" style="background:#ecfdf5"><svg fill="none" stroke="#059669" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><div class="mod-name">Turnos</div><div class="mod-val">18 hoy</div></div><div class="mod-badge"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Munify — Turnos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#112a6c;--blue:#3f6ac8;--green:#18a24d;--ink:#0E1830;--muted:#6B7280;--surface:#fff}
+body{font-family:'Inter',sans-serif;background:#f8f9fc;color:var(--ink);min-height:100vh}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:var(--navy);padding:24px 0;display:flex;flex-direction:column}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 20px 28px}
+.s-logo{width:32px;height:32px}
+.s-name{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:#fff}
+.s-sect{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.3);padding:0 20px;margin:18px 0 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.6);font-size:13px;font-weight:500}
+.nav-item.active{background:rgba(255,255,255,.1);color:#fff;font-weight:600;border-left:3px solid var(--green)}
+.nav-item svg{width:17px;height:17px;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding:18px 20px 0;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.user-av{width:34px;height:34px;border-radius:50%;background:rgba(63,106,200,.3);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700}
+.user-info p{font-size:13px;font-weight:600;color:#fff}
+.user-info small{font-size:11px;color:rgba(255,255,255,.4)}
+.topbar{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:14px 28px;background:#f8f9fc;border-bottom:1px solid #eaecf0;position:sticky;top:0;z-index:10}
+.topbar-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+.topbar-icon svg{width:16px;height:16px}
+.main{display:flex;flex-direction:column}
+.content{padding:28px 32px;flex:1}
+.page-header{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.page-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--navy);flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-secondary{background:var(--surface);color:var(--ink);border:1px solid #e2e8f0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid #eaecf0;border-radius:14px;padding:16px 18px}
+.kpi-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.kpi-val{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--navy);margin-top:6px;line-height:1}
+.kpi-foot{font-size:11px;margin-top:6px}
+.up{color:#16a34a}.dn{color:#dc2626}.neu{color:var(--muted)}
+/* layout calendario + lista */
+.cal-layout{display:grid;grid-template-columns:1fr 340px;gap:20px}
+.card{background:var(--surface);border:1px solid #eaecf0;border-radius:16px;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #eaecf0}
+.card-title{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--navy)}
+/* mini calendario */
+.mini-cal{padding:16px 20px}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-nav-title{font-size:14px;font-weight:700;color:var(--ink)}
+.cal-nav-btn{width:26px;height:26px;border-radius:6px;display:grid;place-items:center;border:1px solid #e2e8f0;background:var(--surface);cursor:pointer}
+.cal-nav-btn svg{width:12px;height:12px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day-name{text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);padding:4px 0}
+.cal-day{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;cursor:pointer;margin:0 auto;position:relative}
+.cal-day:hover{background:#f1f5f9}
+.cal-day.today{background:var(--navy);color:#fff;font-weight:700}
+.cal-day.has-turn::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--green)}
+.cal-day.today.has-turn::after{background:#fff}
+.cal-day.other-month{color:#d1d5db}
+/* agenda del dia */
+.agenda-list{padding:16px 20px}
+.agenda-date{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.turno-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9}
+.turno-item:last-child{border-bottom:none}
+.turno-hora{font-size:12px;font-weight:700;color:var(--ink);width:44px;flex-shrink:0}
+.turno-body{flex:1}
+.turno-nombre{font-size:13px;font-weight:600;color:var(--ink)}
+.turno-dep{font-size:11px;color:var(--muted)}
+.turno-badge{flex-shrink:0}
+.badge{display:inline-flex;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.b-conf{background:#dcfce7;color:#15803d}
+.b-pend{background:#fef9c3;color:#a16207}
+.b-cancel{background:#fee2e2;color:#b91c1c}
+/* grilla semana */
+.week-header{display:grid;grid-template-columns:60px repeat(5,1fr);gap:1px;background:#eaecf0;border:1px solid #eaecf0;border-radius:12px 12px 0 0;overflow:hidden}
+.wh-cell{background:var(--surface);padding:10px;text-align:center}
+.wh-day{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted)}
+.wh-num{font-size:20px;font-weight:700;color:var(--ink);line-height:1.1}
+.wh-num.today{color:var(--navy);background:#eef2ff;border-radius:8px}
+.week-grid{display:grid;grid-template-columns:60px repeat(5,1fr);gap:1px;background:#eaecf0;border:1px solid #eaecf0;border-top:none;border-radius:0 0 12px 12px;overflow:hidden;margin-bottom:18px}
+.hour-label{background:#f8fafc;padding:10px 8px;font-size:10px;font-weight:600;color:var(--muted);text-align:right;display:flex;align-items:flex-start;justify-content:flex-end}
+.slot{background:var(--surface);min-height:52px;padding:4px;position:relative}
+.turno-block{border-radius:6px;padding:5px 8px;font-size:11px;font-weight:600;cursor:pointer;position:absolute;left:4px;right:4px}
+.t-conf{background:#dcfce7;color:#15803d;border-left:3px solid var(--green)}
+.t-pend{background:#fef3c7;color:#92400e;border-left:3px solid #f59e0b}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="s-logo" viewBox="0 0 1446.79 1426" xmlns="http://www.w3.org/2000/svg">
+        <polygon fill="#aebee0" points="1271.65 371.24 1271.65 1069.5 635.82 1426 0 1069.5 0 356.5 635.82 0 1128.59 276.29 1000.48 381.26 636.9 177.4 160.18 444.69 160.18 979.27 636.9 1246.56 1113.62 979.27 1113.62 544.87 1271.65 371.24"/>
+        <polygon fill="#18a24d" points="1446.79 79.97 1225.77 330.78 1113.62 458.05 644.86 989.99 448.06 781.76 448.06 568.98 637.63 759.38 1052.94 410.67 1179.19 304.66 1446.79 79.97"/>
+        <polygon fill="#aebee0" points="404.64 517.83 404.64 1037.89 253.8 953.49 253.8 500.38 332.09 454.86 404.64 517.83"/>
+        <polygon fill="#aebee0" points="1020.14 650.78 1020.14 954.08 867.22 1039.31 868.09 818.95 1020.14 650.78"/>
+      </svg>
+      <div class="s-name">Munify</div>
+    </div>
+    <div class="s-sect">Principal</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>Reclamos</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z"/></svg>Tramites</div>
+    <div class="s-sect">Programacion</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Agenda</div>
+    <div class="nav-item active"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Turnos</div>
+    <div class="sidebar-footer">
+      <div class="user-av">JP</div>
+      <div class="user-info"><p>Juan Perez</p><small>Administrador</small></div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4z"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+    </div>
+    <div class="content">
+      <div class="page-header">
+        <div class="page-title">Turnos</div>
+        <div class="btn btn-secondary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>Lista</div>
+        <div class="btn btn-primary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Nuevo turno</div>
+      </div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Turnos hoy</div>
+          <div class="kpi-val">18</div>
+          <div class="kpi-foot up">14 confirmados</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Esta semana</div>
+          <div class="kpi-val">87</div>
+          <div class="kpi-foot neu">Lun — Vie</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Cancelaciones</div>
+          <div class="kpi-val">4</div>
+          <div class="kpi-foot dn">2 sin reagendar</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Disponibles hoy</div>
+          <div class="kpi-val">6</div>
+          <div class="kpi-foot neu">Slots libres</div>
+        </div>
+      </div>
+      <!-- grilla semana -->
+      <div class="week-header">
+        <div class="wh-cell"></div>
+        <div class="wh-cell"><div class="wh-day">Lun</div><div class="wh-num">23</div></div>
+        <div class="wh-cell"><div class="wh-day">Mar</div><div class="wh-num">24</div></div>
+        <div class="wh-cell"><div class="wh-day">Mie</div><div class="wh-num today" style="padding:4px 8px">25</div></div>
+        <div class="wh-cell"><div class="wh-day">Jue</div><div class="wh-num">26</div></div>
+        <div class="wh-cell"><div class="wh-day">Vie</div><div class="wh-num">27</div></div>
+      </div>
+      <div class="week-grid">
+        <!-- 8:00 -->
+        <div class="hour-label">08:00</div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">R. Soria — Catastro</div></div>
+        <div class="slot"></div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">M. Torres — Habilitacion</div></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <!-- 9:00 -->
+        <div class="hour-label">09:00</div>
+        <div class="slot"><div class="turno-block t-pend" style="top:4px">F. Gomez — Tasas</div></div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">L. Navarro — Civil</div></div>
+        <div class="slot"></div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">P. Diaz — Catastro</div></div>
+        <div class="slot"></div>
+        <!-- 10:00 -->
+        <div class="hour-label">10:00</div>
+        <div class="slot"></div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">A. Ruiz — Habilitacion</div></div>
+        <div class="slot"><div class="turno-block t-pend" style="top:4px">C. Perez — Tasas</div></div>
+        <div class="slot"></div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">V. Lopez — Civil</div></div>
+        <!-- 11:00 -->
+        <div class="hour-label">11:00</div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">J. Molina — Obras</div></div>
+        <div class="slot"></div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">S. Alvarez — Catastro</div></div>
+        <div class="slot"><div class="turno-block t-conf" style="top:4px">D. Martinez — Civil</div></div>
+        <div class="slot"></div>
+      </div>
+      <!-- agenda de hoy -->
+      <div class="cal-layout">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Turnos de hoy — mie 25 jun</div></div>
+          <div class="agenda-list">
+            <div class="turno-item">
+              <div class="turno-hora">08:00</div>
+              <div class="turno-body"><div class="turno-nombre">R. Soria</div><div class="turno-dep">Catastro — Subdivision parcela</div></div>
+              <div class="turno-badge"><div class="badge b-conf">Confirmado</div></div>
+            </div>
+            <div class="turno-item">
+              <div class="turno-hora">08:30</div>
+              <div class="turno-body"><div class="turno-nombre">M. Torres</div><div class="turno-dep">Habilitaciones — Comercio nuevo</div></div>
+              <div class="turno-badge"><div class="badge b-conf">Confirmado</div></div>
+            </div>
+            <div class="turno-item">
+              <div class="turno-hora">09:00</div>
+              <div class="turno-body"><div class="turno-nombre">C. Perez</div><div class="turno-dep">Tasas — Plan de pagos ABL</div></div>
+              <div class="turno-badge"><div class="badge b-pend">Pendiente</div></div>
+            </div>
+            <div class="turno-item">
+              <div class="turno-hora">09:30</div>
+              <div class="turno-body"><div class="turno-nombre">—</div><div class="turno-dep" style="color:#22c55e;font-weight:600">Slot disponible</div></div>
+              <div class="turno-badge"><div class="badge" style="background:#f0fdf4;color:#15803d">Libre</div></div>
+            </div>
+            <div class="turno-item">
+              <div class="turno-hora">10:00</div>
+              <div class="turno-body"><div class="turno-nombre">S. Alvarez</div><div class="turno-dep">Catastro — Mensura</div></div>
+              <div class="turno-badge"><div class="badge b-conf">Confirmado</div></div>
+            </div>
+            <div class="turno-item">
+              <div class="turno-hora">11:00</div>
+              <div class="turno-body"><div class="turno-nombre">J. Molina</div><div class="turno-dep">Obras — Permiso ampliacion</div></div>
+              <div class="turno-badge"><div class="badge b-conf">Confirmado</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Junio 2026</div></div>
+          <div class="mini-cal">
+            <div class="cal-nav">
+              <div class="cal-nav-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></div>
+              <div class="cal-nav-title">Junio 2026</div>
+              <div class="cal-nav-btn"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-day-name">L</div><div class="cal-day-name">M</div><div class="cal-day-name">X</div><div class="cal-day-name">J</div><div class="cal-day-name">V</div><div class="cal-day-name">S</div><div class="cal-day-name">D</div>
+              <div class="cal-day other-month">26</div><div class="cal-day other-month">27</div><div class="cal-day other-month">28</div><div class="cal-day other-month">29</div><div class="cal-day other-month">30</div><div class="cal-day other-month">31</div><div class="cal-day">1</div>
+              <div class="cal-day">2</div><div class="cal-day has-turn">3</div><div class="cal-day">4</div><div class="cal-day has-turn">5</div><div class="cal-day has-turn">6</div><div class="cal-day">7</div><div class="cal-day">8</div>
+              <div class="cal-day has-turn">9</div><div class="cal-day has-turn">10</div><div class="cal-day">11</div><div class="cal-day has-turn">12</div><div class="cal-day has-turn">13</div><div class="cal-day">14</div><div class="cal-day">15</div>
+              <div class="cal-day has-turn">16</div><div class="cal-day has-turn">17</div><div class="cal-day has-turn">18</div><div class="cal-day has-turn">19</div><div class="cal-day has-turn">20</div><div class="cal-day">21</div><div class="cal-day">22</div>
+              <div class="cal-day has-turn">23</div><div class="cal-day has-turn">24</div><div class="cal-day today has-turn">25</div><div class="cal-day has-turn">26</div><div class="cal-day has-turn">27</div><div class="cal-day">28</div><div class="cal-day">29</div>
+              <div class="cal-day">30</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

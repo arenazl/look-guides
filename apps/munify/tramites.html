@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Munify — Tramites</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#112a6c;--blue:#3f6ac8;--green:#18a24d;--ink:#0E1830;--muted:#6B7280;--surface:#fff}
+body{font-family:'Inter',sans-serif;background:#f8f9fc;color:var(--ink);min-height:100vh}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:var(--navy);padding:24px 0;display:flex;flex-direction:column}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 20px 28px}
+.s-logo{width:32px;height:32px}
+.s-name{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:#fff}
+.s-sect{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.3);padding:0 20px;margin:18px 0 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.6);font-size:13px;font-weight:500}
+.nav-item.active{background:rgba(255,255,255,.1);color:#fff;font-weight:600;border-left:3px solid var(--green)}
+.nav-item svg{width:17px;height:17px;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding:18px 20px 0;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.user-av{width:34px;height:34px;border-radius:50%;background:rgba(63,106,200,.3);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700}
+.user-info p{font-size:13px;font-weight:600;color:#fff}
+.user-info small{font-size:11px;color:rgba(255,255,255,.4)}
+.topbar{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:14px 28px;background:#f8f9fc;border-bottom:1px solid #eaecf0;position:sticky;top:0;z-index:10}
+.topbar-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+.topbar-icon svg{width:16px;height:16px}
+.main{display:flex;flex-direction:column;overflow:auto}
+.content{padding:28px 32px;flex:1}
+.page-header{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.page-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--navy);flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-secondary{background:var(--surface);color:var(--ink);border:1px solid #e2e8f0}
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid #e2e8f0;border-radius:10px;padding:0 14px;flex:1}
+.search-bar input{border:none;outline:none;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);width:100%;padding:10px 0}
+.search-bar svg{width:16px;height:16px;color:var(--muted);flex-shrink:0}
+/* kanban */
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
+.col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.col-title{font-size:13px;font-weight:700;color:var(--ink)}
+.col-count{background:#eef2ff;color:#4338ca;border-radius:99px;font-size:11px;font-weight:700;padding:2px 8px}
+.col-count.sol{background:#fef9c3;color:#a16207}
+.col-count.rev{background:#fce7f3;color:#be185d}
+.col-count.ok{background:#dcfce7;color:#15803d}
+.trm-card{background:var(--surface);border:1px solid #eaecf0;border-radius:12px;padding:14px;margin-bottom:10px}
+.trm-card:hover{border-color:var(--blue)}
+.trm-id{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.05em;margin-bottom:6px}
+.trm-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.35}
+.trm-vecino{font-size:11px;color:var(--muted)}
+.trm-meta{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.trm-tipo{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6366f1;background:#eef2ff;padding:2px 7px;border-radius:5px}
+.trm-dias{font-size:11px;color:var(--muted)}
+.trm-dias.vence{color:#dc2626;font-weight:700}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="s-logo" viewBox="0 0 1446.79 1426" xmlns="http://www.w3.org/2000/svg">
+        <polygon fill="#aebee0" points="1271.65 371.24 1271.65 1069.5 635.82 1426 0 1069.5 0 356.5 635.82 0 1128.59 276.29 1000.48 381.26 636.9 177.4 160.18 444.69 160.18 979.27 636.9 1246.56 1113.62 979.27 1113.62 544.87 1271.65 371.24"/>
+        <polygon fill="#18a24d" points="1446.79 79.97 1225.77 330.78 1113.62 458.05 644.86 989.99 448.06 781.76 448.06 568.98 637.63 759.38 1052.94 410.67 1179.19 304.66 1446.79 79.97"/>
+        <polygon fill="#aebee0" points="404.64 517.83 404.64 1037.89 253.8 953.49 253.8 500.38 332.09 454.86 404.64 517.83"/>
+        <polygon fill="#aebee0" points="1020.14 650.78 1020.14 954.08 867.22 1039.31 868.09 818.95 1020.14 650.78"/>
+      </svg>
+      <div class="s-name">Munify</div>
+    </div>
+    <div class="s-sect">Principal</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>Reclamos</div>
+    <div class="nav-item active"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z"/></svg>Tramites</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>Mapa</div>
+    <div class="sidebar-footer">
+      <div class="user-av">JP</div>
+      <div class="user-info"><p>Juan Perez</p><small>Administrador</small></div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4z"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+    </div>
+    <div class="content">
+      <div class="page-header">
+        <div class="page-title">Tramites</div>
+        <div class="search-bar" style="max-width:300px">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input placeholder="Buscar tramite o vecino..." />
+        </div>
+        <div class="btn btn-secondary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 4h18M7 8h14M11 12h10M15 16h6"/></svg>Tabla</div>
+        <div class="btn btn-primary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Nuevo</div>
+      </div>
+      <div class="kanban">
+        <!-- Ingresado -->
+        <div>
+          <div class="col-header">
+            <div class="col-title">Ingresado</div>
+            <div class="col-count">8</div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0084</div>
+            <div class="trm-name">Habilitacion comercial — Farmacia Soria</div>
+            <div class="trm-vecino">R. Soria · 23/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Comercial</div><div class="trm-dias vence">Vence hoy</div></div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0083</div>
+            <div class="trm-name">Permiso de construccion — Local</div>
+            <div class="trm-vecino">C. Torres · 22/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Obras</div><div class="trm-dias">3 dias</div></div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0082</div>
+            <div class="trm-name">Certificado de domicilio</div>
+            <div class="trm-vecino">L. Gomez · 22/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Civil</div><div class="trm-dias">2 dias</div></div>
+          </div>
+        </div>
+        <!-- En revision -->
+        <div>
+          <div class="col-header">
+            <div class="col-title">En revision</div>
+            <div class="col-count rev">14</div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0079</div>
+            <div class="trm-name">Subdivision de parcela — Manzana 12</div>
+            <div class="trm-vecino">F. Diaz · 20/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Catastro</div><div class="trm-dias">6 dias</div></div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0077</div>
+            <div class="trm-name">Certificado libre deuda ABL</div>
+            <div class="trm-vecino">M. Navarro · 19/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Tasas</div><div class="trm-dias">8 dias</div></div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0074</div>
+            <div class="trm-name">Renovacion licencia veraneo</div>
+            <div class="trm-vecino">P. Ruiz · 18/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Comercial</div><div class="trm-dias">9 dias</div></div>
+          </div>
+        </div>
+        <!-- Solicitud info -->
+        <div>
+          <div class="col-header">
+            <div class="col-title">Solicitud de info</div>
+            <div class="col-count sol">5</div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0071</div>
+            <div class="trm-name">Ampliacion de vivienda — Falta plano</div>
+            <div class="trm-vecino">A. Perez · 17/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Obras</div><div class="trm-dias vence">Esperando 4d</div></div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0068</div>
+            <div class="trm-name">Habilitacion kiosco — falta DNI</div>
+            <div class="trm-vecino">V. Lopez · 16/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Comercial</div><div class="trm-dias vence">Esperando 5d</div></div>
+          </div>
+        </div>
+        <!-- Aprobado -->
+        <div>
+          <div class="col-header">
+            <div class="col-title">Aprobado</div>
+            <div class="col-count ok">7</div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0065</div>
+            <div class="trm-name">Habilitacion restaurante El Rancho</div>
+            <div class="trm-vecino">J. Alvarez · 14/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Comercial</div><div class="trm-dias" style="color:#15803d;font-weight:700">Listo</div></div>
+          </div>
+          <div class="trm-card">
+            <div class="trm-id">TRM-0063</div>
+            <div class="trm-name">Certificado catastral — Lote 14</div>
+            <div class="trm-vecino">S. Molina · 13/06/2026</div>
+            <div class="trm-meta"><div class="trm-tipo">Catastro</div><div class="trm-dias" style="color:#15803d;font-weight:700">Listo</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

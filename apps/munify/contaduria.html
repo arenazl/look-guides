@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Munify — Contaduria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#112a6c;--blue:#3f6ac8;--green:#18a24d;--ink:#0E1830;--muted:#6B7280;--surface:#fff}
+body{font-family:'Inter',sans-serif;background:#f8f9fc;color:var(--ink);min-height:100vh}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:var(--navy);padding:24px 0;display:flex;flex-direction:column}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 20px 28px}
+.s-logo{width:32px;height:32px}
+.s-name{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:#fff}
+.s-sect{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.3);padding:0 20px;margin:18px 0 8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.6);font-size:13px;font-weight:500}
+.nav-item.active{background:rgba(255,255,255,.1);color:#fff;font-weight:600;border-left:3px solid var(--green)}
+.nav-item svg{width:17px;height:17px;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding:18px 20px 0;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.user-av{width:34px;height:34px;border-radius:50%;background:rgba(63,106,200,.3);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700}
+.user-info p{font-size:13px;font-weight:600;color:#fff}
+.user-info small{font-size:11px;color:rgba(255,255,255,.4)}
+.topbar{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:14px 28px;background:#f8f9fc;border-bottom:1px solid #eaecf0;position:sticky;top:0;z-index:10}
+.topbar-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+.topbar-icon svg{width:16px;height:16px}
+.main{display:flex;flex-direction:column}
+.content{padding:28px 32px;flex:1}
+.page-header{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.page-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--navy);flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-secondary{background:var(--surface);color:var(--ink);border:1px solid #e2e8f0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid #eaecf0;border-radius:14px;padding:16px 18px}
+.kpi-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.kpi-val{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--navy);margin-top:6px}
+.kpi-foot{font-size:11px;margin-top:4px}
+.up{color:#16a34a}.dn{color:#dc2626}.neu{color:var(--muted)}
+.card{background:var(--surface);border:1px solid #eaecf0;border-radius:16px;overflow:hidden;margin-bottom:18px}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #eaecf0}
+.card-title{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--navy)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:11px 16px;background:#f8fafc;border-bottom:1px solid #eaecf0}
+td{padding:13px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbff}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.b-pend{background:#fffbeb;color:#b45309}
+.b-apro{background:#dcfce7;color:#15803d}
+.b-rej{background:#fee2e2;color:#b91c1c}
+.b-pago{background:#eff6ff;color:#1d4ed8}
+.op-num{font-weight:700;color:var(--blue)}
+.proveedor{font-weight:500}
+.amount{font-weight:700;text-align:right;white-space:nowrap}
+.amount.neg{color:#dc2626}
+.row-2{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+/* mini barchart */
+.bars{display:flex;flex-direction:column;gap:10px;padding:0 20px 20px}
+.bar-row{display:flex;align-items:center;gap:12px}
+.bar-label{font-size:12px;color:var(--ink);width:120px;flex-shrink:0;font-weight:500}
+.bar-track{flex:1;background:#f1f5f9;border-radius:4px;height:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--blue)}
+.bar-val{font-size:12px;font-weight:700;color:var(--ink);width:70px;text-align:right}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="s-logo" viewBox="0 0 1446.79 1426" xmlns="http://www.w3.org/2000/svg">
+        <polygon fill="#aebee0" points="1271.65 371.24 1271.65 1069.5 635.82 1426 0 1069.5 0 356.5 635.82 0 1128.59 276.29 1000.48 381.26 636.9 177.4 160.18 444.69 160.18 979.27 636.9 1246.56 1113.62 979.27 1113.62 544.87 1271.65 371.24"/>
+        <polygon fill="#18a24d" points="1446.79 79.97 1225.77 330.78 1113.62 458.05 644.86 989.99 448.06 781.76 448.06 568.98 637.63 759.38 1052.94 410.67 1179.19 304.66 1446.79 79.97"/>
+        <polygon fill="#aebee0" points="404.64 517.83 404.64 1037.89 253.8 953.49 253.8 500.38 332.09 454.86 404.64 517.83"/>
+        <polygon fill="#aebee0" points="1020.14 650.78 1020.14 954.08 867.22 1039.31 868.09 818.95 1020.14 650.78"/>
+      </svg>
+      <div class="s-name">Munify</div>
+    </div>
+    <div class="s-sect">Principal</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>Reclamos</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z"/></svg>Tramites</div>
+    <div class="s-sect">Contaduria</div>
+    <div class="nav-item active"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Ordenes</div>
+    <div class="nav-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z"/></svg>Reportes</div>
+    <div class="sidebar-footer">
+      <div class="user-av">JP</div>
+      <div class="user-info"><p>Juan Perez</p><small>Administrador</small></div>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4z"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+      <div class="topbar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+    </div>
+    <div class="content">
+      <div class="page-header">
+        <div class="page-title">Contaduria — Ordenes de Pago</div>
+        <div class="btn btn-secondary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Exportar</div>
+        <div class="btn btn-primary"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Nueva OP</div>
+      </div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">OPs este mes</div>
+          <div class="kpi-val">42</div>
+          <div class="kpi-foot neu">18 pendientes aprobacion</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Total OPs pagadas</div>
+          <div class="kpi-val">$2.14M</div>
+          <div class="kpi-foot up">+12% vs mayo</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Retenciones aplicadas</div>
+          <div class="kpi-val">$186K</div>
+          <div class="kpi-foot neu">IIBB + Ganancias</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Proveedores activos</div>
+          <div class="kpi-val">27</div>
+          <div class="kpi-foot neu">3 con saldo pendiente</div>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Ordenes de pago</div>
+            <div style="display:flex;gap:6px">
+              <div class="btn btn-secondary" style="padding:6px 12px;font-size:12px">Pendientes</div>
+              <div class="btn btn-secondary" style="padding:6px 12px;font-size:12px">Todas</div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>N° OP</th>
+                <th>Proveedor</th>
+                <th>Concepto</th>
+                <th>Estado</th>
+                <th style="text-align:right">Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="op-num">OP-2026-041</td>
+                <td class="proveedor">Vialidad SRL</td>
+                <td style="font-size:12px;color:var(--muted)">Bacheo Zona Norte jun</td>
+                <td><div class="badge b-pend">Pendiente</div></td>
+                <td class="amount">$420.000</td>
+              </tr>
+              <tr>
+                <td class="op-num">OP-2026-040</td>
+                <td class="proveedor">Electro Sur SA</td>
+                <td style="font-size:12px;color:var(--muted)">Alumbrado LED plaza</td>
+                <td><div class="badge b-apro">Aprobada</div></td>
+                <td class="amount">$185.000</td>
+              </tr>
+              <tr>
+                <td class="op-num">OP-2026-039</td>
+                <td class="proveedor">Residuos Norte SRL</td>
+                <td style="font-size:12px;color:var(--muted)">Recoleccion junio</td>
+                <td><div class="badge b-pago">Pagada</div></td>
+                <td class="amount">$340.000</td>
+              </tr>
+              <tr>
+                <td class="op-num">OP-2026-038</td>
+                <td class="proveedor">Constructora ABC</td>
+                <td style="font-size:12px;color:var(--muted)">Vereda Bv. San Martin</td>
+                <td><div class="badge b-pend">Pendiente</div></td>
+                <td class="amount">$612.000</td>
+              </tr>
+              <tr>
+                <td class="op-num">OP-2026-037</td>
+                <td class="proveedor">Libreria El Sol</td>
+                <td style="font-size:12px;color:var(--muted)">Insumos admin mayo</td>
+                <td><div class="badge b-rej">Rechazada</div></td>
+                <td class="amount neg">$28.500</td>
+              </tr>
+              <tr>
+                <td class="op-num">OP-2026-036</td>
+                <td class="proveedor">Agua y Saneam. SA</td>
+                <td style="font-size:12px;color:var(--muted)">Servicio jun/jul</td>
+                <td><div class="badge b-pago">Pagada</div></td>
+                <td class="amount">$95.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-head"><div class="card-title">Gasto por rubro</div></div>
+            <div class="bars">
+              <div class="bar-row"><div class="bar-label">Vialidad</div><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div><div class="bar-val">$840K</div></div>
+              <div class="bar-row"><div class="bar-label">Limpieza</div><div class="bar-track"><div class="bar-fill" style="width:60%"></div></div><div class="bar-val">$630K</div></div>
+              <div class="bar-row"><div class="bar-label">Alumbrado</div><div class="bar-track"><div class="bar-fill" style="width:30%"></div></div><div class="bar-val">$315K</div></div>
+              <div class="bar-row"><div class="bar-label">Insumos</div><div class="bar-track"><div class="bar-fill" style="width:22%"></div></div><div class="bar-val">$230K</div></div>
+              <div class="bar-row"><div class="bar-label">Servicios</div><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><div class="bar-val">$190K</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title">Retenciones</div></div>
+            <table>
+              <thead><tr><th>Tipo</th><th style="text-align:right">Monto</th></tr></thead>
+              <tbody>
+                <tr><td>IIBB</td><td class="amount">$92.400</td></tr>
+                <tr><td>Ganancias</td><td class="amount">$78.000</td></tr>
+                <tr><td>IVA Perc.</td><td class="amount">$15.800</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
