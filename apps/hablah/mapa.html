@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hablah — Mapa de progreso</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Geist', system-ui, sans-serif; background: #F2EEE5; color: #0D1412; display: flex; min-height: 100vh; }
+
+  .sidebar { width: 240px; background: #04091a; display: flex; flex-direction: column; padding: 24px 16px; gap: 8px; flex-shrink: 0; }
+  .logo { display: flex; align-items: center; gap: 10px; padding: 8px; margin-bottom: 16px; }
+  .logo-text { font-size: 20px; font-weight: 800; color: #F2EEE5; font-family: 'Instrument Serif', Georgia, serif; }
+  .logo-mark { width: 36px; height: 36px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; color: #8a9ab0; font-size: 14px; font-weight: 500; }
+  .nav-item.active { background: #002554; color: #F2EEE5; }
+  .nav-item svg { width: 18px; height: 18px; }
+  .sidebar-spacer { flex: 1; }
+  .user-card { background: #0f1d3a; border-radius: 12px; padding: 12px; }
+  .user-name { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+  .user-plan { font-size: 11px; color: #8a9ab0; margin-top: 2px; }
+
+  .main { flex: 1; padding: 32px 40px; }
+  .page-title { font-family: 'Instrument Serif', Georgia, serif; font-size: 28px; color: #002554; margin-bottom: 4px; }
+  .page-sub { color: #6b7280; font-size: 14px; margin-bottom: 28px; }
+
+  /* Nivel header */
+  .level-banner { background: #002554; border-radius: 20px; padding: 24px 32px; color: #F2EEE5; display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .level-main { font-family: 'Instrument Serif', Georgia, serif; font-size: 48px; color: #C9A45A; line-height: 1; }
+  .level-label { font-size: 13px; color: #8a9ab0; margin-bottom: 8px; }
+  .level-desc { font-size: 14px; color: #d4cfc4; max-width: 340px; }
+  .progress-bar-outer { background: #1a3a6e; border-radius: 8px; height: 8px; width: 200px; margin-top: 12px; }
+  .progress-bar-inner { background: #C9A45A; border-radius: 8px; height: 8px; width: 65%; }
+  .progress-pct { font-size: 12px; color: #8a9ab0; margin-top: 6px; }
+
+  /* Camino CEFR */
+  .cefr-path { display: flex; align-items: center; gap: 0; margin-bottom: 32px; background: #fff; border-radius: 16px; padding: 20px 24px; border: 1px solid #e8e3d8; overflow-x: auto; }
+  .cefr-node { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .cefr-circle { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
+  .cefr-circle.done { background: #002554; color: #F2EEE5; }
+  .cefr-circle.current { background: #C9A45A; color: #0D1412; box-shadow: 0 0 0 4px rgba(201,164,90,.3); }
+  .cefr-circle.future { background: #e8e3d8; color: #9ca3af; }
+  .cefr-label { font-size: 11px; color: #6b7280; }
+  .cefr-line { height: 2px; width: 40px; background: #e8e3d8; flex-shrink: 0; }
+  .cefr-line.done { background: #002554; }
+
+  /* Hitos */
+  .hitos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .hito-card { background: #fff; border-radius: 14px; padding: 16px; border: 1px solid #e8e3d8; }
+  .hito-done { border-color: #22c55e; }
+  .hito-icon { font-size: 20px; margin-bottom: 8px; }
+  .hito-title { font-size: 13px; font-weight: 700; color: #0D1412; }
+  .hito-meta { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .hito-check { width: 16px; height: 16px; border-radius: 50%; background: #22c55e; display: inline-flex; align-items: center; justify-content: center; float: right; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">
+    <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00B37E"/><stop offset="100%" stop-color="#008F63"/></linearGradient></defs>
+      <rect width="64" height="64" rx="14" fill="url(#hg)"/>
+      <g fill="#FFF"><rect x="13" y="26" width="6" height="12" rx="3"/><rect x="22" y="14" width="6" height="36" rx="3"/><rect x="28" y="29" width="8" height="6" rx="3"/><rect x="36" y="22" width="6" height="28" rx="3"/><rect x="45" y="28" width="6" height="14" rx="3"/></g>
+      <path d="M 28 8 Q 31 5 34 8" stroke="#FFB800" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">hablah</span>
+  </div>
+  <div class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    Hoy
+  </div>
+  <div class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+    Practicar
+  </div>
+  <div class="nav-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>
+    Mapa
+  </div>
+  <div class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+    Historial
+  </div>
+  <div class="sidebar-spacer"></div>
+  <div class="user-card">
+    <div class="user-name">Martin G.</div>
+    <div class="user-plan">Plan Individual - B1</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="page-title">Mapa de progreso</div>
+  <div class="page-sub">Tu camino al nivel C1 - 47 clases completadas</div>
+
+  <div class="level-banner">
+    <div>
+      <div class="level-label">NIVEL ACTUAL</div>
+      <div class="level-main">B1</div>
+      <div class="level-desc">Podes mantener conversaciones sobre temas cotidianos y de trabajo. El siguiente paso es B2: debates y temas abstractos.</div>
+    </div>
+    <div>
+      <div class="level-label" style="color:#8a9ab0;">HACIA B2</div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner"></div></div>
+      <div class="progress-pct">65% completado</div>
+    </div>
+  </div>
+
+  <div class="cefr-path">
+    <div class="cefr-node"><div class="cefr-circle done">A0</div><div class="cefr-label">Completado</div></div>
+    <div class="cefr-line done"></div>
+    <div class="cefr-node"><div class="cefr-circle done">A1</div><div class="cefr-label">Completado</div></div>
+    <div class="cefr-line done"></div>
+    <div class="cefr-node"><div class="cefr-circle done">A2</div><div class="cefr-label">Completado</div></div>
+    <div class="cefr-line done"></div>
+    <div class="cefr-node"><div class="cefr-circle current">B1</div><div class="cefr-label">En curso</div></div>
+    <div class="cefr-line"></div>
+    <div class="cefr-node"><div class="cefr-circle future">B2</div><div class="cefr-label">Siguiente</div></div>
+    <div class="cefr-line"></div>
+    <div class="cefr-node"><div class="cefr-circle future">C1</div><div class="cefr-label">Meta</div></div>
+    <div class="cefr-line"></div>
+    <div class="cefr-node"><div class="cefr-circle future">C2</div><div class="cefr-label"></div></div>
+  </div>
+
+  <div style="font-size:16px;font-weight:700;color:#002554;margin-bottom:14px;">Hitos recientes</div>
+  <div class="hitos-grid">
+    <div class="hito-card hito-done">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hito-title">Primera clase completada</div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#22c55e"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <div class="hito-meta">Hace 3 meses</div>
+    </div>
+    <div class="hito-card hito-done">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hito-title">Racha de 7 dias</div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#22c55e"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <div class="hito-meta">Hace 2 semanas</div>
+    </div>
+    <div class="hito-card hito-done">
+      <div style="display:flex;justify-content:space-between;align-items:start;">
+        <div class="hito-title">Supere el nivel A2</div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#22c55e"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <div class="hito-meta">Hace 1 mes</div>
+    </div>
+    <div class="hito-card">
+      <div class="hito-title">Superar el nivel B1</div>
+      <div class="hito-meta">Pronto - 35% restante</div>
+      <div class="progress-bar-outer" style="width:100%;margin-top:10px;"><div class="progress-bar-inner" style="width:65%;"></div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

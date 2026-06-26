@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hablah — Historial</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Geist', system-ui, sans-serif; background: #F2EEE5; color: #0D1412; display: flex; min-height: 100vh; }
+
+  .sidebar { width: 240px; background: #04091a; display: flex; flex-direction: column; padding: 24px 16px; gap: 8px; flex-shrink: 0; }
+  .logo { display: flex; align-items: center; gap: 10px; padding: 8px; margin-bottom: 16px; }
+  .logo-text { font-size: 20px; font-weight: 800; color: #F2EEE5; font-family: 'Instrument Serif', Georgia, serif; }
+  .logo-mark { width: 36px; height: 36px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; color: #8a9ab0; font-size: 14px; font-weight: 500; }
+  .nav-item.active { background: #002554; color: #F2EEE5; }
+  .nav-item svg { width: 18px; height: 18px; }
+  .sidebar-spacer { flex: 1; }
+  .user-card { background: #0f1d3a; border-radius: 12px; padding: 12px; }
+  .user-name { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+  .user-plan { font-size: 11px; color: #8a9ab0; margin-top: 2px; }
+
+  .main { flex: 1; padding: 32px 40px; }
+  .page-title { font-family: 'Instrument Serif', Georgia, serif; font-size: 28px; color: #002554; margin-bottom: 4px; }
+  .page-sub { color: #6b7280; font-size: 14px; margin-bottom: 28px; }
+
+  .month-label { font-size: 12px; font-weight: 700; color: #9ca3af; letter-spacing: 1px; margin-bottom: 12px; margin-top: 20px; }
+  .session-card { background: #fff; border-radius: 16px; padding: 18px 20px; border: 1px solid #e8e3d8; margin-bottom: 10px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: border-color .15s; }
+  .session-card:hover { border-color: #002554; }
+
+  .score-badge { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; flex-shrink: 0; }
+  .score-high { background: #dcfce7; color: #15803d; }
+  .score-mid { background: #fef3c7; color: #b45309; }
+  .score-low { background: #fee2e2; color: #b91c1c; }
+
+  .session-info { flex: 1; }
+  .session-topic { font-size: 15px; font-weight: 600; color: #0D1412; margin-bottom: 3px; }
+  .session-meta { font-size: 12px; color: #6b7280; }
+  .session-chips { display: flex; gap: 6px; margin-top: 6px; }
+  .chip { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+  .chip-level { background: #eff6ff; color: #1d4ed8; }
+  .chip-dur { background: #f5f3ff; color: #7c3aed; }
+
+  .verdict { font-size: 12px; color: #6b7280; max-width: 340px; border-left: 3px solid #e8e3d8; padding-left: 12px; margin-left: auto; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">
+    <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00B37E"/><stop offset="100%" stop-color="#008F63"/></linearGradient></defs>
+      <rect width="64" height="64" rx="14" fill="url(#hg)"/>
+      <g fill="#FFF"><rect x="13" y="26" width="6" height="12" rx="3"/><rect x="22" y="14" width="6" height="36" rx="3"/><rect x="28" y="29" width="8" height="6" rx="3"/><rect x="36" y="22" width="6" height="28" rx="3"/><rect x="45" y="28" width="6" height="14" rx="3"/></g>
+      <path d="M 28 8 Q 31 5 34 8" stroke="#FFB800" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">hablah</span>
+  </div>
+  <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Hoy</div>
+  <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>Practicar</div>
+  <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/></svg>Mapa</div>
+  <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>Historial</div>
+  <div class="sidebar-spacer"></div>
+  <div class="user-card"><div class="user-name">Martin G.</div><div class="user-plan">Plan Individual - B1</div></div>
+</div>
+
+<div class="main">
+  <div class="page-title">Historial de clases</div>
+  <div class="page-sub">47 clases completadas - Junio 2026</div>
+
+  <div class="month-label">JUNIO 2026</div>
+
+  <div class="session-card">
+    <div class="score-badge score-high">8.4</div>
+    <div class="session-info">
+      <div class="session-topic">Viajes y aeropuertos</div>
+      <div class="session-meta">25 jun - 14 min - Aria</div>
+      <div class="session-chips">
+        <span class="chip chip-level">B1</span>
+        <span class="chip chip-dur">14 min</span>
+      </div>
+    </div>
+    <div class="verdict">Excelente fluidez. Errores menores en preposiciones: "at the airport" no "in the airport".</div>
+  </div>
+
+  <div class="session-card">
+    <div class="score-badge score-mid">7.1</div>
+    <div class="session-info">
+      <div class="session-topic">Tecnologia y redes sociales</div>
+      <div class="session-meta">24 jun - 12 min - Aria</div>
+      <div class="session-chips">
+        <span class="chip chip-level">B1</span>
+        <span class="chip chip-dur">12 min</span>
+      </div>
+    </div>
+    <div class="verdict">Vocabulario tecnico solido. Trabajar mas la estructura de las oraciones largas.</div>
+  </div>
+
+  <div class="session-card">
+    <div class="score-badge score-high">8.9</div>
+    <div class="session-info">
+      <div class="session-topic">Mi trabajo y el equipo</div>
+      <div class="session-meta">23 jun - 18 min - Aria</div>
+      <div class="session-chips">
+        <span class="chip chip-level">B1</span>
+        <span class="chip chip-dur">18 min</span>
+      </div>
+    </div>
+    <div class="verdict">Clase muy completa. Descripcion del trabajo clara y natural. Excelente ritmo de conversacion.</div>
+  </div>
+
+  <div class="session-card">
+    <div class="score-badge score-mid">6.8</div>
+    <div class="session-info">
+      <div class="session-topic">Salud y habitos diarios</div>
+      <div class="session-meta">20 jun - 10 min - Aria</div>
+      <div class="session-chips">
+        <span class="chip chip-level">B1</span>
+        <span class="chip chip-dur">10 min</span>
+      </div>
+    </div>
+    <div class="verdict">Vocabulario de salud por desarrollar. Buena comprension pero produccion lenta en este topico.</div>
+  </div>
+
+  <div class="month-label">MAYO 2026</div>
+
+  <div class="session-card">
+    <div class="score-badge score-high">9.1</div>
+    <div class="session-info">
+      <div class="session-topic">Cultura y entretenimiento</div>
+      <div class="session-meta">30 may - 16 min - Aria</div>
+      <div class="session-chips">
+        <span class="chip chip-level">A2</span>
+        <span class="chip chip-dur">16 min</span>
+      </div>
+    </div>
+    <div class="verdict">La mejor clase hasta ahora. Nivel A2 superado con claridad. Recomendado subir a B1.</div>
+  </div>
+</div>
+
+</body>
+</html>

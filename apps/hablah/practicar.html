@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hablah — Practicar</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Geist', system-ui, sans-serif; background: rgba(14,22,20,.97); color: #e6e8ec; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+  .session-wrap { width: 100%; max-width: 680px; padding: 32px 24px; }
+
+  /* Header */
+  .session-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+  .session-topic-badge { background: #002554; color: #C9A45A; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: 1px solid #1a3a6e; }
+  .session-level { font-size: 12px; color: #6b7280; }
+
+  /* Titulo */
+  .session-title { font-family: 'Instrument Serif', Georgia, serif; font-size: 26px; color: #F2EEE5; margin-bottom: 6px; text-align: center; }
+  .session-sub { font-size: 13px; color: #6b7280; text-align: center; margin-bottom: 36px; }
+
+  /* Transcript */
+  .transcript { background: #0a0e14; border: 1px solid #1e2435; border-radius: 20px; padding: 20px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px; min-height: 260px; }
+  .msg { display: flex; flex-direction: column; }
+  .msg.ai { align-items: flex-start; }
+  .msg.user { align-items: flex-end; }
+  .msg-who { font-size: 10px; color: #6b7280; margin-bottom: 4px; letter-spacing: 0.5px; }
+  .msg-bubble { padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; max-width: 85%; }
+  .msg.ai .msg-bubble { background: #0b1f33; border: 1px solid #1e3a5f; color: #e2e8f0; }
+  .msg.user .msg-bubble { background: #0b2a1a; border: 1px solid #1e4d33; color: #d1fae5; }
+
+  /* Audio visualizer */
+  .viz { display: flex; align-items: center; justify-content: center; gap: 5px; height: 48px; margin-bottom: 24px; }
+  .viz-bar { width: 4px; border-radius: 4px; background: #22c55e; }
+
+  /* Controls */
+  .controls { display: flex; align-items: center; justify-content: center; gap: 20px; }
+  .btn-main { background: #002554; border: 2px solid #C9A45A; color: #C9A45A; width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .btn-main svg { width: 28px; height: 28px; }
+  .btn-end { background: #1a0a0a; border: 1px solid #7f1d1d; color: #ef4444; padding: 10px 24px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+  .live-label { font-size: 12px; color: #22c55e; display: flex; align-items: center; gap: 6px; }
+</style>
+</head>
+<body>
+
+<div class="session-wrap">
+  <div class="session-header">
+    <div class="session-topic-badge">Entrevistas de trabajo</div>
+    <div class="session-level">Nivel B1 - Aria</div>
+  </div>
+
+  <div class="session-title">Clase en vivo</div>
+  <div class="session-sub">Habla cuando quieras. El coach te escucha y responde.</div>
+
+  <div class="transcript">
+    <div class="msg ai">
+      <div class="msg-who">COACH - ARIA</div>
+      <div class="msg-bubble">Hi Martin! Great to have you here. Today we're going to practice job interview questions. Let's start with a classic one: can you tell me a little bit about yourself and your experience?</div>
+    </div>
+    <div class="msg user">
+      <div class="msg-who">VOS</div>
+      <div class="msg-bubble">Hi! I'm Martin, I work in software, um... I have five years of experience in development web.</div>
+    </div>
+    <div class="msg ai">
+      <div class="msg-who">COACH - ARIA</div>
+      <div class="msg-bubble">Nice! Web development - a very in-demand field. "I have five years of experience in web development" - great. What kind of projects have you worked on? Frontend, backend, or both?</div>
+    </div>
+    <div class="msg user">
+      <div class="msg-who">VOS</div>
+      <div class="msg-bubble">Both! I work with React and also Python in the backend...</div>
+    </div>
+  </div>
+
+  <div class="viz">
+    <div class="viz-bar" style="height:12px; opacity:.4;"></div>
+    <div class="viz-bar" style="height:28px;"></div>
+    <div class="viz-bar" style="height:40px;"></div>
+    <div class="viz-bar" style="height:32px;"></div>
+    <div class="viz-bar" style="height:44px;"></div>
+    <div class="viz-bar" style="height:36px;"></div>
+    <div class="viz-bar" style="height:24px; opacity:.7;"></div>
+    <div class="viz-bar" style="height:14px; opacity:.4;"></div>
+  </div>
+
+  <div class="controls">
+    <div class="btn-end">Terminar clase</div>
+    <div class="btn-main">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/>
+      </svg>
+    </div>
+    <div class="live-label"><div class="live-dot"></div>Escuchando</div>
+  </div>
+</div>
+
+</body>
+</html>
